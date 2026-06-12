@@ -59,12 +59,6 @@ export default function TestimonialsSection() {
     );
   }, [current, direction]);
 
-  // Autoplay
-  useEffect(() => {
-    autoPlayRef.current = setInterval(() => goTo((current + 1) % testimonials.length, 'next'), 6000);
-    return () => { if (autoPlayRef.current) clearInterval(autoPlayRef.current); };
-  }, [current]);
-
   const goTo = useCallback((index: number, dir: 'next' | 'prev') => {
     if (isAnimating || index === current) return;
     setIsAnimating(true);
@@ -73,10 +67,19 @@ export default function TestimonialsSection() {
     setTimeout(() => setIsAnimating(false), 700);
   }, [current, isAnimating]);
 
+  // Autoplay
+  useEffect(() => {
+    autoPlayRef.current = setInterval(() => goTo((current + 1) % testimonials.length, 'next'), 6000);
+    return () => { if (autoPlayRef.current) clearInterval(autoPlayRef.current); };
+  }, [current, goTo]);
+
   const handleTouchStart = (e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX; };
   const handleTouchEnd = (e: React.TouchEvent) => {
     const diff = e.changedTouches[0].clientX - touchStartX.current;
-    if (Math.abs(diff) > 50) diff > 0 ? goTo((current - 1 + testimonials.length) % testimonials.length, 'prev') : goTo((current + 1) % testimonials.length, 'next');
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) goTo((current - 1 + testimonials.length) % testimonials.length, 'prev');
+      else goTo((current + 1) % testimonials.length, 'next');
+    }
   };
 
   const t = testimonials[current];

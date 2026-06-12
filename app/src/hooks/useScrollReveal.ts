@@ -21,23 +21,20 @@ export function useScrollReveal<T extends HTMLElement>(
 ): RefObject<T | null> {
   const ref = useRef<T>(null);
 
+  const {
+    y = 40,
+    x = 0,
+    opacity = 0,
+    duration = 0.9,
+    delay = 0,
+    ease = 'power3.out',
+    start = 'top 88%',
+    scale,
+  } = options;
+
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-
-    const {
-      y = 40,
-      x = 0,
-      opacity = 0,
-      duration = 0.9,
-      delay = 0,
-      ease = 'power3.out',
-      start = 'top 88%',
-      scale,
-    } = options;
-
-    const fromVars: gsap.TweenVars = { y, x, opacity, duration, delay, ease };
-    if (scale !== undefined) fromVars.scale = scale;
 
     gsap.set(el, { y, x, opacity, ...(scale !== undefined ? { scale } : {}) });
 
@@ -59,7 +56,7 @@ export function useScrollReveal<T extends HTMLElement>(
     return () => {
       tween.kill();
     };
-  }, []);
+  }, [y, x, opacity, duration, delay, ease, start, scale]);
 
   return ref;
 }
@@ -70,24 +67,24 @@ export function useStaggerReveal<T extends HTMLElement>(
 ) {
   const containerRef = useRef<T>(null);
 
+  const {
+    y = 40,
+    x = 0,
+    opacity = 0,
+    duration = 0.9,
+    delay = 0,
+    stagger = 0.12,
+    ease = 'power3.out',
+    start = 'top 88%',
+    scale,
+  } = options;
+
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     const children = container.querySelectorAll(selector);
     if (!children.length) return;
-
-    const {
-      y = 40,
-      x = 0,
-      opacity = 0,
-      duration = 0.9,
-      delay = 0,
-      stagger = 0.12,
-      ease = 'power3.out',
-      start = 'top 88%',
-      scale,
-    } = options;
 
     gsap.set(children, { y, x, opacity, ...(scale !== undefined ? { scale } : {}) });
 
@@ -110,7 +107,7 @@ export function useStaggerReveal<T extends HTMLElement>(
     return () => {
       tween.kill();
     };
-  }, [selector]);
+  }, [selector, y, x, opacity, duration, delay, stagger, ease, start, scale]);
 
   return containerRef;
 }

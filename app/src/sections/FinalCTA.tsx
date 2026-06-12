@@ -5,6 +5,16 @@ import { Phone, Sparkles, Play } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Generated once at module load so render stays pure.
+const PARTICLES = Array.from({ length: 8 }, () => ({
+  size: 2 + Math.random() * 3,
+  opacity: 0.15 + Math.random() * 0.2,
+  left: 10 + Math.random() * 80,
+  top: 10 + Math.random() * 80,
+  duration: 5 + Math.random() * 5,
+  delay: Math.random() * 5,
+}));
+
 export default function FinalCTA() {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -80,20 +90,20 @@ export default function FinalCTA() {
 
       {/* Floating particles */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {Array.from({ length: 8 }).map((_, i) => (
+        {PARTICLES.map((p, i) => (
           <div
             key={i}
             className="absolute rounded-full"
             style={{
-              width: `${2 + Math.random() * 3}px`,
-              height: `${2 + Math.random() * 3}px`,
+              width: `${p.size}px`,
+              height: `${p.size}px`,
               background: 'var(--color-gold)',
-              opacity: 0.15 + Math.random() * 0.2,
-              left: `${10 + Math.random() * 80}%`,
-              top: `${10 + Math.random() * 80}%`,
+              opacity: p.opacity,
+              left: `${p.left}%`,
+              top: `${p.top}%`,
               boxShadow: '0 0 8px rgba(212,168,67,0.4)',
-              animation: `float ${5 + Math.random() * 5}s ease-in-out infinite`,
-              animationDelay: `${Math.random() * 5}s`,
+              animation: `float ${p.duration}s ease-in-out infinite`,
+              animationDelay: `${p.delay}s`,
             }}
           />
         ))}

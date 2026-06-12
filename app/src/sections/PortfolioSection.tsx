@@ -132,22 +132,31 @@ function Lightbox({ items, current, onClose, onNext, onPrev }: {
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
+
+  useEffect(() => {
     gsap.fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power2.out' });
     gsap.fromTo(contentRef.current, { scale: 0.85, opacity: 0, y: 40 }, { scale: 1, opacity: 1, y: 0, duration: 0.5, ease: 'power3.out', delay: 0.1 });
+  }, [current]);
 
+  useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
       if (e.key === 'ArrowRight') onNext();
       if (e.key === 'ArrowLeft') onPrev();
     };
     window.addEventListener('keydown', onKey);
-    return () => { document.body.style.overflow = ''; window.removeEventListener('keydown', onKey); };
-  }, [current]);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose, onNext, onPrev]);
 
   const handleTouchStart = (e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX; };
   const handleTouchEnd = (e: React.TouchEvent) => {
     const diff = e.changedTouches[0].clientX - touchStartX.current;
-    if (Math.abs(diff) > 60) diff > 0 ? onPrev() : onNext();
+    if (Math.abs(diff) > 60) {
+      if (diff > 0) onPrev();
+      else onNext();
+    }
   };
 
   return (

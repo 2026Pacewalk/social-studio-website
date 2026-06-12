@@ -127,8 +127,8 @@ export default function AboutSection() {
               <img
                 src="/assets/about-studio.jpg"
                 alt="Social Studios - Premium Creative Production"
-                className="w-full object-cover transition-transform duration-[1.5s] group-hover:scale-105"
-                style={{ aspectRatio: '4/5' }}
+                className="w-full object-cover transition-transform group-hover:scale-105"
+                style={{ aspectRatio: '4/5', transitionDuration: '1.5s' }}
                 loading="lazy"
               />
 

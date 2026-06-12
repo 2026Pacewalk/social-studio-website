@@ -55,7 +55,7 @@ export default function ContactSection() {
     'Brand Promotion', 'Podcast Production', 'Real Estate Shoot', 'Automobile Cinematography',
   ];
 
-  const inputStyle = (focused: boolean, _hasValue: boolean): React.CSSProperties => ({
+  const inputStyle = (focused: boolean): React.CSSProperties => ({
     width: '100%',
     background: 'rgba(17,17,17,0.7)',
     border: '1px solid ' + (focused ? 'var(--color-gold)' : 'rgba(212,168,67,0.08)'),
@@ -169,12 +169,12 @@ export default function ContactSection() {
                     {/* Name */}
                     <div className="form-reveal relative">
                       <label style={labelStyle('name', form.name)}>Your Name</label>
-                      <input type="text" required value={form.name} onChange={(e) => setField('name', e.target.value)} onFocus={() => setFocus('name')} onBlur={() => setFocus(null)} style={inputStyle(form.focus === 'name', !!form.name)} />
+                      <input type="text" required value={form.name} onChange={(e) => setField('name', e.target.value)} onFocus={() => setFocus('name')} onBlur={() => setFocus(null)} style={inputStyle(form.focus === 'name')} />
                     </div>
                     {/* Email */}
                     <div className="form-reveal relative">
                       <label style={labelStyle('email', form.email)}>Email Address</label>
-                      <input type="email" required value={form.email} onChange={(e) => setField('email', e.target.value)} onFocus={() => setFocus('email')} onBlur={() => setFocus(null)} style={inputStyle(form.focus === 'email', !!form.email)} />
+                      <input type="email" required value={form.email} onChange={(e) => setField('email', e.target.value)} onFocus={() => setFocus('email')} onBlur={() => setFocus(null)} style={inputStyle(form.focus === 'email')} />
                     </div>
                   </div>
 
@@ -182,12 +182,12 @@ export default function ContactSection() {
                     {/* Phone */}
                     <div className="form-reveal relative">
                       <label style={labelStyle('phone', form.phone)}>Phone Number</label>
-                      <input type="tel" value={form.phone} onChange={(e) => setField('phone', e.target.value)} onFocus={() => setFocus('phone')} onBlur={() => setFocus(null)} style={inputStyle(form.focus === 'phone', !!form.phone)} />
+                      <input type="tel" value={form.phone} onChange={(e) => setField('phone', e.target.value)} onFocus={() => setFocus('phone')} onBlur={() => setFocus(null)} style={inputStyle(form.focus === 'phone')} />
                     </div>
                     {/* Service */}
                     <div className="form-reveal relative">
                       <label style={labelStyle('service', form.service)}>Select Service</label>
-                      <select value={form.service} onChange={(e) => setField('service', e.target.value)} onFocus={() => setFocus('service')} onBlur={() => setFocus(null)} style={{ ...inputStyle(form.focus === 'service', !!form.service), appearance: 'none', color: form.service ? 'var(--color-text-primary)' : 'var(--color-text-muted)' }}>
+                      <select value={form.service} onChange={(e) => setField('service', e.target.value)} onFocus={() => setFocus('service')} onBlur={() => setFocus(null)} style={{ ...inputStyle(form.focus === 'service'), appearance: 'none', color: form.service ? 'var(--color-text-primary)' : 'var(--color-text-muted)' }}>
                         <option value="">Select a service</option>
                         {services.map((s) => (<option key={s} value={s}>{s}</option>))}
                       </select>
@@ -197,7 +197,7 @@ export default function ContactSection() {
                   {/* Message */}
                   <div className="form-reveal relative mb-6">
                     <label style={labelStyle('message', form.message)}>Tell us about your project</label>
-                    <textarea rows={4} value={form.message} onChange={(e) => setField('message', e.target.value)} onFocus={() => setFocus('message')} onBlur={() => setFocus(null)} style={{ ...inputStyle(form.focus === 'message', !!form.message), resize: 'none' }} />
+                    <textarea rows={4} value={form.message} onChange={(e) => setField('message', e.target.value)} onFocus={() => setFocus('message')} onBlur={() => setFocus(null)} style={{ ...inputStyle(form.focus === 'message'), resize: 'none' }} />
                   </div>
 
                   <button type="submit" className="form-reveal btn-gold btn-gold-primary w-full" data-hover>

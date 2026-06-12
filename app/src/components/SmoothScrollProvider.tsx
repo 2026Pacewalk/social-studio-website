@@ -1,36 +1,31 @@
-import { useEffect, useRef, createContext, useContext, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import Lenis from 'lenis';
-
-const LenisContext = createContext<Lenis | null>(null);
-
-export function useLenis() {
-  return useContext(LenisContext);
-}
+import { LenisContext } from '@/hooks/useLenis';
 
 export default function SmoothScrollProvider({ children }: { children: ReactNode }) {
-  const lenisRef = useRef<Lenis | null>(null);
+  const [lenis, setLenis] = useState<Lenis | null>(null);
 
   useEffect(() => {
-    const lenis = new Lenis({
+    const instance = new Lenis({
       lerp: 0.1,
       smoothWheel: true,
     });
-    lenisRef.current = lenis;
+    setLenis(instance);
 
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
+    let rafId = requestAnimationFrame(function raf(time: number) {
+      instance.raf(time);
+      rafId = requestAnimationFrame(raf);
+    });
 
     return () => {
-      lenis.destroy();
-      lenisRef.current = null;
+      cancelAnimationFrame(rafId);
+      instance.destroy();
+      setLenis(null);
     };
   }, []);
 
   return (
-    <LenisContext.Provider value={lenisRef.current}>
+    <LenisContext.Provider value={lenis}>
       {children}
     </LenisContext.Provider>
   );
