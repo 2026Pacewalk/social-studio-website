@@ -1,0 +1,232 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* SOCIAL STUDIOS - Black + Gold Luxury Theme */
+    --color-bg-base: #080808;
+    --color-bg-surface: #111111;
+    --color-bg-elevated: #141414;
+    --color-bg-card: #0d0d0d;
+    --color-gold: #D4A843;
+    --color-gold-light: #E8C76A;
+    --color-gold-dark: #B8922E;
+    --color-gold-metallic: #C9972D;
+    --color-text-primary: #F5F0E8;
+    --color-text-secondary: #9E9789;
+    --color-text-muted: #5C564D;
+    --color-border-glass: rgba(212, 168, 67, 0.08);
+    --color-border-gold: rgba(212, 168, 67, 0.25);
+    --color-gold-glow: rgba(212, 168, 67, 0.15);
+
+    --font-display: "Playfair Display", serif;
+    --font-body: "Inter", sans-serif;
+    --font-accent: "Cormorant Garamond", serif;
+
+    --space-section: 120px;
+    --space-container: max(1.5rem, 5vw);
+    --radius-corner: 12px;
+
+    --background: 0 0% 3%;
+    --foreground: 38 24% 94%;
+    --card: 0 0% 5%;
+    --card-foreground: 38 24% 94%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 38 24% 94%;
+    --primary: 42 58% 55%;
+    --primary-foreground: 0 0% 3%;
+    --secondary: 0 0% 8%;
+    --secondary-foreground: 38 24% 94%;
+    --muted: 0 0% 8%;
+    --muted-foreground: 38 10% 58%;
+    --accent: 42 58% 55%;
+    --accent-foreground: 0 0% 3%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 42 58% 55% / 0.08;
+    --input: 0 0% 12%;
+    --ring: 42 58% 55%;
+    --radius: 0.75rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    background-color: var(--color-bg-base);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    cursor: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html {
+    cursor: none;
+    scroll-behavior: auto;
+  }
+
+  a, button, input, textarea, select {
+    cursor: none;
+  }
+
+  ::selection {
+    background: rgba(212, 168, 67, 0.3);
+    color: var(--color-text-primary);
+  }
+}
+
+@layer components {
+  .gold-text {
+    color: var(--color-gold);
+  }
+
+  .gold-text-gradient {
+    background: linear-gradient(135deg, var(--color-gold-light) 0%, var(--color-gold) 50%, var(--color-gold-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gold-border {
+    border: 1px solid var(--color-border-gold);
+  }
+
+  .glass-card {
+    background: rgba(17, 17, 17, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--color-border-glass);
+  }
+
+  .gold-glow {
+    box-shadow: 0 0 40px rgba(212, 168, 67, 0.1), 0 0 80px rgba(212, 168, 67, 0.05);
+  }
+
+  .gold-glow-hover:hover {
+    box-shadow: 0 0 30px rgba(212, 168, 67, 0.2), 0 0 60px rgba(212, 168, 67, 0.1);
+  }
+
+  .section-padding {
+    padding: var(--space-section) var(--space-container);
+  }
+
+  .btn-gold {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 2.5rem;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-radius: var(--radius-corner);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-gold-primary {
+    background: var(--color-gold);
+    color: var(--color-bg-base);
+    border: 1px solid var(--color-gold);
+  }
+
+  .btn-gold-primary:hover {
+    background: var(--color-gold-light);
+    box-shadow: 0 0 40px rgba(212, 168, 67, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .btn-gold-outline {
+    background: transparent;
+    color: var(--color-gold);
+    border: 1px solid var(--color-border-gold);
+  }
+
+  .btn-gold-outline:hover {
+    background: rgba(212, 168, 67, 0.1);
+    border-color: var(--color-gold);
+    box-shadow: 0 0 30px rgba(212, 168, 67, 0.15);
+    transform: translateY(-2px);
+  }
+
+  .text-display {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .text-accent {
+    font-family: var(--font-accent);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .luxury-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--color-gold) 50%, transparent 100%);
+    opacity: 0.3;
+  }
+
+  .grain-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+  }
+}
+
+@layer utilities {
+  .gold-shimmer {
+    background: linear-gradient(90deg, var(--color-gold-dark), var(--color-gold-light), var(--color-gold-dark));
+    background-size: 200% auto;
+    animation: goldShimmer 3s linear infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@keyframes goldShimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: 0 0 20px rgba(212, 168, 67, 0.2); }
+  50% { box-shadow: 0 0 40px rgba(212, 168, 67, 0.4); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
