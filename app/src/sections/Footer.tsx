@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Instagram, Youtube, Linkedin, Twitter, Phone, MessageCircle, Mail, MapPin, ArrowUpRight } from 'lucide-react';
@@ -56,9 +57,11 @@ export default function Footer() {
     return () => ctx.revert();
   }, []);
 
+  const navigate = useNavigate();
   const handleNav = (href: string) => {
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
+    else navigate('/' + href);
   };
 
   return (
@@ -127,6 +130,17 @@ export default function Footer() {
                   </button>
                 </li>
               ))}
+              <li>
+                <Link
+                  to="/sitemap"
+                  className="footer-reveal font-body text-sm transition-all duration-300 hover:text-[var(--color-gold)] hover:translate-x-1 inline-flex items-center gap-1 group"
+                  style={{ color: 'var(--color-text-secondary)' }}
+                  data-hover
+                >
+                  Sitemap
+                  <ArrowUpRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: 'var(--color-gold)' }} />
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -193,6 +207,7 @@ export default function Footer() {
           <div className="flex items-center gap-6">
             <span className="font-body text-xs transition-colors duration-300 hover:text-[var(--color-gold)] cursor-pointer" style={{ color: 'var(--color-text-muted)' }} data-hover>Privacy</span>
             <span className="font-body text-xs transition-colors duration-300 hover:text-[var(--color-gold)] cursor-pointer" style={{ color: 'var(--color-text-muted)' }} data-hover>Terms</span>
+            <Link to="/sitemap" className="font-body text-xs transition-colors duration-300 hover:text-[var(--color-gold)]" style={{ color: 'var(--color-text-muted)' }} data-hover>Sitemap</Link>
             <span className="font-accent text-xs italic" style={{ color: 'var(--color-text-muted)' }}>Luxury In Every Frame</span>
           </div>
         </div>

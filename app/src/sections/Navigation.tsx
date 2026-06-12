@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router';
 import { Menu, X } from 'lucide-react';
 
 const navLinks = [
@@ -20,10 +21,12 @@ export default function Navigation() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  const navigate = useNavigate();
   const handleNav = (href: string) => {
     setMenuOpen(false);
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
+    else navigate('/' + href);
   };
 
   return (
@@ -38,7 +41,7 @@ export default function Navigation() {
     >
       <div className="flex items-center justify-between" style={{ padding: '1.2rem var(--space-container)' }}>
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2" data-hover>
+        <Link to="/" className="flex items-center gap-2" data-hover>
           <span
             className="font-display text-xl md:text-2xl font-bold tracking-wide"
             style={{ color: 'var(--color-gold)' }}
@@ -51,7 +54,7 @@ export default function Navigation() {
           >
             STUDIOS
           </span>
-        </a>
+        </Link>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">

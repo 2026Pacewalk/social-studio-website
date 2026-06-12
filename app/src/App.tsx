@@ -1,49 +1,22 @@
-import { useEffect } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Routes, Route, Navigate, useNavigate } from 'react-router';
 import SmoothScrollProvider from '@/components/SmoothScrollProvider';
 import CustomCursor from '@/components/CustomCursor';
 import Navigation from '@/sections/Navigation';
-import HeroSection from '@/sections/HeroSection';
-import TrustSection from '@/sections/TrustSection';
-import AboutSection from '@/sections/AboutSection';
-import FoundersSection from '@/sections/FoundersSection';
-import ServicesSection from '@/sections/ServicesSection';
-import WhyChooseUs from '@/sections/WhyChooseUs';
-import PortfolioSection from '@/sections/PortfolioSection';
-import TestimonialsSection from '@/sections/TestimonialsSection';
-import FinalCTA from '@/sections/FinalCTA';
-import ContactSection from '@/sections/ContactSection';
 import Footer from '@/sections/Footer';
-
-gsap.registerPlugin(ScrollTrigger);
+import Home from '@/pages/Home';
+import Sitemap from '@/pages/Sitemap';
 
 function App() {
-  useEffect(() => {
-    const timer = setTimeout(() => ScrollTrigger.refresh(), 1000);
-    return () => {
-      clearTimeout(timer);
-      ScrollTrigger.getAll().forEach((st) => st.kill());
-    };
-  }, []);
-
   return (
     <SmoothScrollProvider>
       <CustomCursor />
       <div className="grain-overlay" />
       <Navigation />
-      <main>
-        <HeroSection />
-        <TrustSection />
-        <AboutSection />
-        <FoundersSection />
-        <ServicesSection />
-        <WhyChooseUs />
-        <PortfolioSection />
-        <TestimonialsSection />
-        <FinalCTA />
-        <ContactSection />
-      </main>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/sitemap" element={<Sitemap />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
       <Footer />
       <MobileBottomBar />
     </SmoothScrollProvider>
@@ -52,9 +25,11 @@ function App() {
 
 /* ─── Mobile Bottom Bar ─── */
 function MobileBottomBar() {
+  const navigate = useNavigate();
   const handleNav = (href: string) => {
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
+    else navigate('/' + href);
   };
 
   return (

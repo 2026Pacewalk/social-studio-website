@@ -140,7 +140,7 @@ export default function HeroSection() {
           className="font-body text-base md:text-lg leading-relaxed max-w-3xl mx-auto mb-10"
           style={{ color: 'var(--color-text-secondary)', lineHeight: 1.8 }}
         >
-          Whether it's your wedding, fashion portfolio, maternity journey, brand, or business — we create cinematic visuals that make people stop, feel, and remember. Because ordinary content gets ignored. Powerful storytelling doesn't.
+          Social Studios is a premium visual production house in India. Whether it's your wedding, fashion portfolio, maternity journey, brand, or business — we create cinematic films and photography that make people stop, feel, and remember. Because ordinary content gets ignored. Powerful storytelling doesn't.
         </p>
 
         {/* CTA Buttons */}

@@ -90,7 +90,7 @@ function FounderCard({ name, role, image, icon: Icon, socials, delay }: FounderC
         <div className="relative overflow-hidden" style={{ aspectRatio: '3/4' }}>
           <img
             src={image}
-            alt={name}
+            alt={`${name} — ${role} at Social Studios`}
             className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
             loading="lazy"
           />

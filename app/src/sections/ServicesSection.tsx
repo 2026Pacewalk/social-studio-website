@@ -121,7 +121,7 @@ function ServiceCard({ service, index }: { service: typeof services[0]; index: n
           transform: 'translateY(20px) scale(1.05)',
         }}
       >
-        <img src={service.image} alt={service.title} className="w-full h-full object-cover" />
+        <img src={service.image} alt={`${service.title} by Social Studios`} loading="lazy" className="w-full h-full object-cover" />
         <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, transparent 50%, rgba(8,8,8,0.4))' }} />
       </div>
 
