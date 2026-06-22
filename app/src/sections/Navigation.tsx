@@ -41,19 +41,13 @@ export default function Navigation() {
     >
       <div className="flex items-center justify-between" style={{ padding: '1.2rem var(--space-container)' }}>
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2" data-hover>
-          <span
-            className="font-display text-xl md:text-2xl font-bold tracking-wide"
-            style={{ color: 'var(--color-gold)' }}
-          >
-            SOCIAL
-          </span>
-          <span
-            className="font-body text-xs md:text-sm tracking-[0.2em] uppercase"
-            style={{ color: 'var(--color-text-secondary)' }}
-          >
-            STUDIOS
-          </span>
+        <Link to="/" className="flex items-center" data-hover aria-label="Social Studios — home">
+          <img
+            src="/assets/logo.png"
+            alt="Social Studios"
+            className="h-9 md:h-11 w-auto"
+            style={{ objectFit: 'contain' }}
+          />
         </Link>
 
         {/* Desktop Nav */}

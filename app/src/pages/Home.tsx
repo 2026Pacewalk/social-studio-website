@@ -8,7 +8,6 @@ import FAQSection from '@/sections/FAQSection';
 import HeroSection from '@/sections/HeroSection';
 import TrustSection from '@/sections/TrustSection';
 import AboutSection from '@/sections/AboutSection';
-import FoundersSection from '@/sections/FoundersSection';
 import ServicesSection from '@/sections/ServicesSection';
 import WhyChooseUs from '@/sections/WhyChooseUs';
 import PortfolioSection from '@/sections/PortfolioSection';
@@ -53,7 +52,6 @@ export default function Home() {
       <HeroSection />
       <TrustSection />
       <AboutSection />
-      <FoundersSection />
       <ServicesSection />
       <WhyChooseUs />
       <PortfolioSection />

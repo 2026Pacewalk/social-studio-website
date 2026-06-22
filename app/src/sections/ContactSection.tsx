@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Phone, Mail, Globe, Send, MessageCircle, Clock, CheckCircle } from 'lucide-react';
+import { Phone, Mail, Globe, Send, MessageCircle, Clock, CheckCircle, MapPin } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -89,10 +89,11 @@ export default function ContactSection() {
   };
 
   const contactItems = [
-    { icon: Phone, label: 'Phone', value: '98778 51923', href: 'tel:+919877851923' },
-    { icon: Phone, label: 'Phone', value: '87280 55300', href: 'tel:+918728055300' },
+    { icon: Phone, label: 'Sukhjeet Singh Brar', value: '87280 55300', href: 'tel:+918728055300' },
+    { icon: Phone, label: 'Kajal Kataik', value: '98778 51923', href: 'tel:+919877851923' },
+    { icon: Mail, label: 'Email', value: 'Sukhjeetbrar@socialtheory.in', href: 'mailto:Sukhjeetbrar@socialtheory.in' },
     { icon: Globe, label: 'Website', value: 'socialstudios.in', href: 'https://socialstudios.in' },
-    { icon: Mail, label: 'Email', value: 'hello@socialstudios.in', href: 'mailto:hello@socialstudios.in' },
+    { icon: MapPin, label: 'Studio', value: 'CPM 34, 2nd Floor, Sector 105, Central Plaza, Emaar, Near Indian Bank, Mohali', href: 'https://maps.app.goo.gl/qkrT7n4rDbNSevPr7' },
   ];
 
   return (
@@ -121,13 +122,21 @@ export default function ContactSection() {
             {/* Contact items */}
             <div className="flex flex-col gap-4 mb-10">
               {contactItems.map((item) => (
-                <a key={item.value} href={item.href} className="contact-reveal flex items-center gap-4 group" style={{ color: 'var(--color-text-primary)' }} data-hover>
+                <a
+                  key={item.value}
+                  href={item.href}
+                  target={item.href.startsWith('http') ? '_blank' : undefined}
+                  rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  className="contact-reveal flex items-start gap-4 group"
+                  style={{ color: 'var(--color-text-primary)' }}
+                  data-hover
+                >
                   <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-all duration-400 group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(212,168,67,0.15)]" style={{ background: 'rgba(212,168,67,0.06)', border: '1px solid rgba(212,168,67,0.1)' }}>
                     <item.icon size={16} style={{ color: 'var(--color-gold)' }} />
                   </div>
                   <div>
                     <p className="font-body text-[11px] uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>{item.label}</p>
-                    <p className="font-body text-sm font-medium transition-colors duration-300 group-hover:text-[var(--color-gold)]">{item.value}</p>
+                    <p className="font-body text-sm font-medium transition-colors duration-300 group-hover:text-[var(--color-gold)]" style={{ lineHeight: 1.6 }}>{item.value}</p>
                   </div>
                 </a>
               ))}

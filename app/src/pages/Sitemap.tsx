@@ -53,7 +53,7 @@ const groups: { title: string; icon: typeof Map; links: SitemapLink[] }[] = [
     links: [
       { label: '98778 51923', href: 'tel:+919877851923', external: true },
       { label: '87280 55300', href: 'tel:+918728055300', external: true },
-      { label: 'hello@socialstudios.in', href: 'mailto:hello@socialstudios.in', external: true },
+      { label: 'Sukhjeetbrar@socialtheory.in', href: 'mailto:Sukhjeetbrar@socialtheory.in', external: true },
       { label: 'Chat on WhatsApp', href: 'https://wa.me/919877851923', external: true },
       { label: 'socialstudios.in', href: 'https://socialstudios.in', external: true },
     ],
