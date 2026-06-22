@@ -73,6 +73,24 @@
     cursor: none;
   }
 
+  /* Admin pages have no custom cursor — restore the native one */
+  html.native-cursor,
+  html.native-cursor body,
+  html.native-cursor [data-hover] {
+    cursor: auto;
+  }
+  html.native-cursor a,
+  html.native-cursor button,
+  html.native-cursor select,
+  html.native-cursor label,
+  html.native-cursor [role="button"] {
+    cursor: pointer;
+  }
+  html.native-cursor input,
+  html.native-cursor textarea {
+    cursor: text;
+  }
+
   ::selection {
     background: rgba(212, 168, 67, 0.3);
     color: var(--color-text-primary);

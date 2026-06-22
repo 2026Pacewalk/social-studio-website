@@ -1,4 +1,5 @@
-import { Routes, Route, Navigate, Outlet, useNavigate } from 'react-router';
+import { useEffect } from 'react';
+import { Routes, Route, Navigate, Outlet, useNavigate, useLocation } from 'react-router';
 import SmoothScrollProvider from '@/components/SmoothScrollProvider';
 import CustomCursor from '@/components/CustomCursor';
 import Navigation from '@/sections/Navigation';
@@ -14,9 +15,18 @@ import PortfolioPage from '@/admin/PortfolioPage';
 import TestimonialsPage from '@/admin/TestimonialsPage';
 import UsersPage from '@/admin/UsersPage';
 
+function CursorMode() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    document.documentElement.classList.toggle('native-cursor', pathname.startsWith('/admin'));
+  }, [pathname]);
+  return null;
+}
+
 function App() {
   return (
     <AuthProvider>
+      <CursorMode />
       <Routes>
         {/* Admin */}
         <Route path="/admin/login" element={<Login />} />
