@@ -37,13 +37,28 @@ export default function FAQSection() {
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
+    const items = gsap.utils.toArray<HTMLElement>('.faq-reveal', section);
+    if (!items.length) return;
+
+    let revealed = false;
+    const reveal = () => {
+      if (revealed) return;
+      revealed = true;
+      gsap.to(items, { y: 0, opacity: 1, duration: 0.8, stagger: 0.08, ease: 'power3.out', overwrite: true });
+    };
+
     const ctx = gsap.context(() => {
-      gsap.from(section.querySelectorAll('.faq-reveal'), {
-        y: 40, opacity: 0, duration: 0.8, stagger: 0.08, ease: 'power3.out',
-        scrollTrigger: { trigger: section, start: 'top 80%' },
-      });
+      gsap.set(items, { y: 40, opacity: 0 });
+      ScrollTrigger.create({ trigger: section, start: 'top 90%', onEnter: reveal, invalidateOnRefresh: true });
     }, section);
-    return () => ctx.revert();
+
+    // Fail-safe: if the trigger never fires (stale layout / reduced motion),
+    // never leave the content invisible once the section is on screen.
+    const failSafe = window.setTimeout(() => {
+      if (!revealed && section.getBoundingClientRect().top < window.innerHeight) reveal();
+    }, 1200);
+
+    return () => { window.clearTimeout(failSafe); ctx.revert(); };
   }, []);
 
   return (

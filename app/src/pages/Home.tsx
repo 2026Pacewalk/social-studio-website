@@ -28,9 +28,15 @@ export default function Home() {
   });
 
   useEffect(() => {
-    const timer = setTimeout(() => ScrollTrigger.refresh(), 1000);
+    // Recompute trigger positions after layout settles (fonts/images) so
+    // reveal animations don't get stuck with stale start points.
+    const timers = [setTimeout(() => ScrollTrigger.refresh(), 1000), setTimeout(() => ScrollTrigger.refresh(), 2500)];
+    const onLoad = () => ScrollTrigger.refresh();
+    window.addEventListener('load', onLoad);
+    if (document.fonts?.ready) document.fonts.ready.then(() => ScrollTrigger.refresh());
     return () => {
-      clearTimeout(timer);
+      timers.forEach(clearTimeout);
+      window.removeEventListener('load', onLoad);
       ScrollTrigger.getAll().forEach((st) => st.kill());
     };
   }, []);
