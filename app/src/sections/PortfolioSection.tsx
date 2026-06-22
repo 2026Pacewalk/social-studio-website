@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { X, ChevronLeft, ChevronRight, ZoomIn, Calendar, Camera, Tag } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, ZoomIn, Calendar, Camera, Tag, Download, Share2, Check } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
 /* ─── Portfolio Data ─── */
-const categories = ['All', 'Weddings', 'Fashion', 'Brands', 'Podcasts', 'Maternity', 'Corporate', 'Real Estate', 'Automobile'];
+const PORTFOLIO_PDF = '/assets/social-studio-portfolio.pdf';
+const categories = ['All', 'Weddings', 'Fashion', 'Jewelry', 'Brands', 'Food', 'Real Estate', 'Automobile', 'Podcasts', 'Studio'];
 
 interface PortfolioItem {
   src: string;
@@ -18,23 +19,32 @@ interface PortfolioItem {
 }
 
 const portfolioItems: PortfolioItem[] = [
-  { src: '/assets/port-wedding-1.jpg', title: 'Eternal Vows', category: 'Weddings', year: '2024', desc: 'A luxury wedding film capturing every tear, smile, and promise.', aspect: 'tall' },
-  { src: '/assets/port-fashion-1.jpg', title: 'Golden Hour', category: 'Fashion', year: '2024', desc: 'High-fashion editorial with dramatic lighting and bold styling.', aspect: 'wide' },
-  { src: '/assets/port-brand-1.jpg', title: 'Luxe Essence', category: 'Brands', year: '2024', desc: 'Premium brand campaign with cinematic product storytelling.', aspect: 'square' },
-  { src: '/assets/port-wedding-2.jpg', title: 'Royal Celebration', category: 'Weddings', year: '2023', desc: 'An opulent wedding celebration under the stars.', aspect: 'wide' },
-  { src: '/assets/podcast-1.jpg', title: 'The Creative Show', category: 'Podcasts', year: '2024', desc: 'Full podcast production with cinematic studio setup.', aspect: 'wide' },
-  { src: '/assets/port-maternity-1.jpg', title: 'New Beginnings', category: 'Maternity', year: '2024', desc: 'Elegant maternity storytelling celebrating motherhood.', aspect: 'tall' },
-  { src: '/assets/port-corporate-1.jpg', title: 'Executive Vision', category: 'Corporate', year: '2024', desc: 'Premium corporate portraits for a leading tech firm.', aspect: 'wide' },
-  { src: '/assets/port-realestate-1.jpg', title: 'Luxury Living', category: 'Real Estate', year: '2023', desc: 'Cinematic property walkthrough with drone shots.', aspect: 'square' },
-  { src: '/assets/port-auto-1.jpg', title: 'Speed & Elegance', category: 'Automobile', year: '2024', desc: 'Showroom automotive cinematography with dramatic lighting.', aspect: 'tall' },
-  { src: '/assets/port-wedding-3.jpg', title: 'Sacred Union', category: 'Weddings', year: '2024', desc: 'Traditional wedding ceremony captured with cinematic precision.', aspect: 'tall' },
-  { src: '/assets/port-fashion-2.jpg', title: 'Royal Threads', category: 'Fashion', year: '2023', desc: 'Designer wear campaign with regal aesthetics.', aspect: 'tall' },
-  { src: '/assets/port-brand-2.jpg', title: 'Essentials', category: 'Brands', year: '2024', desc: 'Luxury accessories flat-lay with golden studio lighting.', aspect: 'square' },
-  { src: '/assets/podcast-2.jpg', title: 'The Audiosphere', category: 'Podcasts', year: '2024', desc: 'Professional dual-host podcast with cinematic production.', aspect: 'wide' },
-  { src: '/assets/port-maternity-2.jpg', title: 'Divine Glow', category: 'Maternity', year: '2024', desc: 'Fine art maternity portrait with ethereal golden lighting.', aspect: 'tall' },
-  { src: '/assets/port-corporate-2.jpg', title: 'Team Vision', category: 'Corporate', year: '2023', desc: 'Group corporate portrait with cinematic office backdrop.', aspect: 'wide' },
-  { src: '/assets/port-realestate-2.jpg', title: 'Ocean Estate', category: 'Real Estate', year: '2024', desc: 'Aerial drone cinematography of a luxury beachfront property.', aspect: 'wide' },
-  { src: '/assets/port-auto-2.jpg', title: 'Midnight Ride', category: 'Automobile', year: '2024', desc: 'Dramatic automotive showcase with spotlight cinematography.', aspect: 'tall' },
+  { src: '/assets/portfolio/wedding-seated.jpg', title: 'Crimson Royalty', category: 'Weddings', year: '2025', desc: 'Bridal couture editorial — regal jewellery and hand-crafted lehenga under a crimson glow.', aspect: 'wide' },
+  { src: '/assets/portfolio/auto-audi-q8.jpg', title: 'Audi Q8 Unveiled', category: 'Automobile', year: '2025', desc: 'Outdoor showcase shoot for Audi Chandigarh — powered by Social Studios & Social Theory.', aspect: 'wide' },
+  { src: '/assets/portfolio/jewelry-ring.jpg', title: 'Tied in Gold', category: 'Jewelry', year: '2025', desc: 'Macro product photography of a gold bow ring styled on flowing silk.', aspect: 'square' },
+  { src: '/assets/portfolio/fashion-white-dress.jpg', title: 'Sculpted in Light', category: 'Fashion', year: '2025', desc: 'High-fashion portrait on a sculpted blue set — where beauty meets the lens.', aspect: 'tall' },
+  { src: '/assets/portfolio/realestate-living.jpg', title: 'Grand Living', category: 'Real Estate', year: '2025', desc: 'Architectural interior of a luxury residence — every angle tells a story.', aspect: 'wide' },
+  { src: '/assets/portfolio/podcast-studio.jpg', title: 'The Conversation Room', category: 'Podcasts', year: '2025', desc: 'Cinematic podcast set design — where conversations come to life.', aspect: 'square' },
+  { src: '/assets/portfolio/wedding-lehenga.jpg', title: 'Heirloom Elegance', category: 'Weddings', year: '2025', desc: 'Fine-art bridal portrait — style that speaks louder than words.', aspect: 'tall' },
+  { src: '/assets/portfolio/brand-candle.jpg', title: 'Scented Stories', category: 'Brands', year: '2025', desc: 'Crafted product shot for a luxury candle brand — set the mood, light the moment.', aspect: 'wide' },
+  { src: '/assets/portfolio/food-mojito.jpg', title: 'Tropical Pour', category: 'Food', year: '2025', desc: 'Beverage styling and photography — savour the flavour through the lens.', aspect: 'tall' },
+  { src: '/assets/portfolio/auto-porsche-turbo.jpg', title: 'Turbo Charged', category: 'Automobile', year: '2025', desc: 'Detail study of a Porsche Turbo — ads that perform fast, focused, fearless.', aspect: 'wide' },
+  { src: '/assets/portfolio/fashion-blue-seated.jpg', title: 'Azure Muse', category: 'Fashion', year: '2025', desc: 'Editorial fashion campaign with sculptural styling and azure light.', aspect: 'wide' },
+  { src: '/assets/portfolio/jewelry-necklace.jpg', title: 'Heart of Gold', category: 'Jewelry', year: '2025', desc: 'Delicate pendant photographed to tell your story in gold.', aspect: 'square' },
+  { src: '/assets/portfolio/studio-setup.jpg', title: 'Behind the Light', category: 'Studio', year: '2025', desc: 'Inside our studio — softboxes, strobes and the craft behind every frame.', aspect: 'tall' },
+  { src: '/assets/portfolio/food-champagne.jpg', title: 'Pop the Moment', category: 'Food', year: '2025', desc: 'Premium beverage product shoot styled for editorial campaigns.', aspect: 'wide' },
+  { src: '/assets/portfolio/wedding-veil.jpg', title: 'The Veiled Bride', category: 'Weddings', year: '2025', desc: 'Intimate bridal close-up — every shot is a masterpiece.', aspect: 'wide' },
+  { src: '/assets/portfolio/auto-taycan.jpg', title: 'Taycan Nights', category: 'Automobile', year: '2025', desc: 'Low-light automotive campaign — luxury framed right, Porsche by Social Studio.', aspect: 'wide' },
+  { src: '/assets/portfolio/brand-serum.jpg', title: 'Eternal Radiance', category: 'Brands', year: '2025', desc: 'Crafting the perfect shot for a luxury skincare brand.', aspect: 'square' },
+  { src: '/assets/portfolio/realestate-lobby.jpg', title: 'Lobby Luxe', category: 'Real Estate', year: '2025', desc: 'Picture-perfect interiors — just a click away.', aspect: 'wide' },
+  { src: '/assets/portfolio/jewelry-earrings.jpg', title: 'Bow Sonata', category: 'Jewelry', year: '2025', desc: 'Statement earrings styled on tulle for a campaign hero shot.', aspect: 'square' },
+  { src: '/assets/portfolio/fashion-formal.jpg', title: 'Power Formals', category: 'Fashion', year: '2025', desc: 'Apparel campaign for modern formal wear — style that speaks.', aspect: 'square' },
+  { src: '/assets/portfolio/podcast-mic.jpg', title: 'Your Voice, Our Vision', category: 'Podcasts', year: '2025', desc: 'Studio-grade audio capture for premium podcast production.', aspect: 'wide' },
+  { src: '/assets/portfolio/auto-interior.jpg', title: 'Cockpit Craft', category: 'Automobile', year: '2025', desc: 'Interior detailing shot — precision in performance, power in results.', aspect: 'tall' },
+  { src: '/assets/portfolio/food-dessert.jpg', title: 'Sweet Indulgence', category: 'Food', year: '2025', desc: 'Styled dessert and beverage flat-lay for a lifestyle campaign.', aspect: 'wide' },
+  { src: '/assets/portfolio/brand-decor.jpg', title: 'Brand in Bloom', category: 'Brands', year: '2025', desc: 'Lifestyle product styling for Social Theory — crafted for the elite.', aspect: 'tall' },
+  { src: '/assets/portfolio/realestate-interior.jpg', title: 'Spaces that Speak', category: 'Real Estate', year: '2025', desc: 'Editorial interior photography that turns spaces into stories.', aspect: 'wide' },
+  { src: '/assets/portfolio/studio-lounge.jpg', title: 'The Creative Lounge', category: 'Studio', year: '2025', desc: 'Our in-house creative lounge — premium sets built for every brief.', aspect: 'wide' },
 ];
 
 /* ─── Masonry Item ─── */
@@ -279,9 +289,30 @@ function Lightbox({ items, current, onClose, onNext, onPrev }: {
 export default function PortfolioSection() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+  const [shareState, setShareState] = useState<'idle' | 'copied'>('idle');
   const gridRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const filterRef = useRef<HTMLDivElement>(null);
+
+  const sharePortfolio = useCallback(async () => {
+    const url = `${window.location.origin}${PORTFOLIO_PDF}`;
+    const shareData = {
+      title: 'Social Studios — Portfolio',
+      text: 'Take a look at the Social Studios portfolio.',
+      url,
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        return;
+      }
+      await navigator.clipboard.writeText(url);
+      setShareState('copied');
+      setTimeout(() => setShareState('idle'), 2200);
+    } catch {
+      /* user dismissed the share sheet — no action needed */
+    }
+  }, []);
 
   const filtered = activeCategory === 'All'
     ? portfolioItems
@@ -345,6 +376,32 @@ export default function PortfolioSection() {
           <p className="font-body text-base max-w-3xl mx-auto" style={{ color: 'var(--color-text-secondary)', lineHeight: 1.9 }}>
             Every project begins with a vision, a feeling, or a dream. And our job is to turn it into something unforgettable. From luxury weddings and fashion campaigns to cinematic brand productions and emotional storytelling — every visual we create is designed to leave an impact.
           </p>
+
+          {/* Portfolio PDF actions */}
+          <div className="flex flex-wrap items-center justify-center gap-3 mt-9">
+            <a
+              href={PORTFOLIO_PDF}
+              download="Social-Studios-Portfolio.pdf"
+              className="btn-gold btn-gold-primary"
+              style={{ gap: '0.6rem' }}
+              data-hover
+            >
+              <Download size={17} />
+              Download Portfolio
+            </a>
+            <button
+              onClick={sharePortfolio}
+              className="btn-gold btn-gold-outline"
+              style={{ gap: '0.6rem' }}
+              data-hover
+            >
+              {shareState === 'copied' ? <Check size={17} /> : <Share2 size={17} />}
+              {shareState === 'copied' ? 'Link Copied' : 'Share'}
+            </button>
+          </div>
+          <p className="font-body text-xs mt-3" style={{ color: 'var(--color-text-muted)' }}>
+            Full studio portfolio · PDF · ~3 MB
+          </p>
         </div>
 
         {/* Category Filters */}
@@ -381,9 +438,16 @@ export default function PortfolioSection() {
 
         {/* View more CTA */}
         <div className="text-center mt-16">
-          <button className="btn-gold btn-gold-outline" data-hover>
-            View All Projects
-          </button>
+          <a
+            href={PORTFOLIO_PDF}
+            download="Social-Studios-Portfolio.pdf"
+            className="btn-gold btn-gold-outline"
+            style={{ gap: '0.6rem' }}
+            data-hover
+          >
+            <Download size={17} />
+            View Full Portfolio
+          </a>
         </div>
       </div>
 
