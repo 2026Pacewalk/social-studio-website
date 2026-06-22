@@ -104,6 +104,10 @@ export default function ContactSection() {
       if (res.ok && (data.success === 'true' || data.success === true)) {
         setStatus('success');
         setForm(EMPTY);
+      } else if (typeof data.message === 'string' && /activat/i.test(data.message)) {
+        // FormSubmit one-time activation pending — surface a clear, friendly note
+        setStatus('error');
+        setErrorMsg('Our form is being set up and will be live shortly. In the meantime, please WhatsApp or call us — we’ll respond right away.');
       } else {
         throw new Error(data.message || 'Submission failed');
       }
