@@ -2,13 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Phone, Mail, Globe, Send, MessageCircle, Clock, CheckCircle, MapPin, ChevronDown, Loader2, AlertCircle } from 'lucide-react';
+import { api } from '@/lib/api';
 
 gsap.registerPlugin(ScrollTrigger);
-
-// FormSubmit delivers to the first address; _cc adds the second.
-// One-time: the first submission triggers an activation email — click the link once.
-const FORM_ENDPOINT = 'https://formsubmit.co/ajax/Sukhjeetbrar@socialtheory.in';
-const CC_EMAIL = 'Kajal@socialtheory.in';
 
 const SERVICES = [
   'Wedding Cinematography',
@@ -80,37 +76,18 @@ export default function ContactSection() {
     setStatus('sending');
     setErrorMsg('');
     try {
-      const payload: Record<string, string> = {
-        Name: form.name,
-        Email: form.email,
-        Phone: form.phone,
-        Service: form.service,
-        Budget: form.budget || 'Not specified',
-        Message: form.message || '—',
-        _cc: CC_EMAIL,
-        _subject: `New ${form.service || 'enquiry'} — socialstudios.in`,
-        _template: 'table',
-        _captcha: 'false',
-      };
-      if (showDate && form.eventDate) payload['Preferred Date'] = form.eventDate;
-      if (showBrand && form.brand) payload['Brand / Company'] = form.brand;
-
-      const res = await fetch(FORM_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(payload),
+      await api.post('/api/leads', {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        service: form.service,
+        eventDate: showDate ? form.eventDate : '',
+        brand: showBrand ? form.brand : '',
+        budget: form.budget,
+        message: form.message,
       });
-      const data = await res.json().catch(() => ({}));
-      if (res.ok && (data.success === 'true' || data.success === true)) {
-        setStatus('success');
-        setForm(EMPTY);
-      } else if (typeof data.message === 'string' && /activat/i.test(data.message)) {
-        // FormSubmit one-time activation pending — surface a clear, friendly note
-        setStatus('error');
-        setErrorMsg('Our form is being set up and will be live shortly. In the meantime, please WhatsApp or call us — we’ll respond right away.');
-      } else {
-        throw new Error(data.message || 'Submission failed');
-      }
+      setStatus('success');
+      setForm(EMPTY);
     } catch {
       setStatus('error');
       setErrorMsg('Something went wrong sending your message. Please WhatsApp or call us — we’ll respond right away.');

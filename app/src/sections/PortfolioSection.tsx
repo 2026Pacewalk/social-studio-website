@@ -2,12 +2,13 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { X, ChevronLeft, ChevronRight, ZoomIn, Calendar, Camera, Tag, Download, Share2, Check } from 'lucide-react';
+import { api } from '@/lib/api';
 
 gsap.registerPlugin(ScrollTrigger);
 
 /* ─── Portfolio Data ─── */
 const PORTFOLIO_PDF = '/assets/social-studio-portfolio.pdf';
-const categories = ['All', 'Weddings', 'Fashion', 'Jewelry', 'Brands', 'Food', 'Real Estate', 'Automobile', 'Podcasts', 'Studio'];
+const CATEGORY_ORDER = ['Weddings', 'Fashion', 'Jewelry', 'Brands', 'Food', 'Real Estate', 'Automobile', 'Podcasts', 'Studio'];
 
 interface PortfolioItem {
   src: string;
@@ -18,7 +19,12 @@ interface PortfolioItem {
   aspect: 'tall' | 'wide' | 'square';
 }
 
-const portfolioItems: PortfolioItem[] = [
+interface ApiPortfolioItem {
+  image: string; title: string; category: string; year: string; description: string; aspect: 'tall' | 'wide' | 'square';
+}
+
+// Static fallback used until the API responds (or if it's unreachable)
+const FALLBACK_ITEMS: PortfolioItem[] = [
   { src: '/assets/portfolio/wedding-seated.jpg', title: 'Crimson Royalty', category: 'Weddings', year: '2025', desc: 'Bridal couture editorial — regal jewellery and hand-crafted lehenga under a crimson glow.', aspect: 'wide' },
   { src: '/assets/portfolio/auto-audi-q8.jpg', title: 'Audi Q8 Unveiled', category: 'Automobile', year: '2025', desc: 'Outdoor showcase shoot for Audi Chandigarh — powered by Social Studios & Social Theory.', aspect: 'wide' },
   { src: '/assets/portfolio/jewelry-ring.jpg', title: 'Tied in Gold', category: 'Jewelry', year: '2025', desc: 'Macro product photography of a gold bow ring styled on flowing silk.', aspect: 'square' },
@@ -290,9 +296,24 @@ export default function PortfolioSection() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
   const [shareState, setShareState] = useState<'idle' | 'copied'>('idle');
+  const [items, setItems] = useState<PortfolioItem[]>(FALLBACK_ITEMS);
   const gridRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const filterRef = useRef<HTMLDivElement>(null);
+
+  // Load portfolio from the CMS; keep the static fallback if it's empty/unreachable
+  useEffect(() => {
+    api.get<{ items: ApiPortfolioItem[] }>('/api/portfolio')
+      .then((d) => {
+        if (d.items?.length) {
+          setItems(d.items.map((it) => ({ src: it.image, title: it.title, category: it.category, year: it.year, desc: it.description, aspect: it.aspect })));
+        }
+      })
+      .catch(() => { /* keep fallback */ });
+  }, []);
+
+  const categories = ['All', ...CATEGORY_ORDER.filter((c) => items.some((i) => i.category === c)),
+    ...[...new Set(items.map((i) => i.category))].filter((c) => !CATEGORY_ORDER.includes(c))];
 
   const sharePortfolio = useCallback(async () => {
     const url = `${window.location.origin}${PORTFOLIO_PDF}`;
@@ -315,8 +336,8 @@ export default function PortfolioSection() {
   }, []);
 
   const filtered = activeCategory === 'All'
-    ? portfolioItems
-    : portfolioItems.filter((p) => p.category === activeCategory);
+    ? items
+    : items.filter((p) => p.category === activeCategory);
 
   // Header animation
   useEffect(() => {

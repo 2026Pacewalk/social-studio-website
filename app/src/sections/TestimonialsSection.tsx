@@ -2,10 +2,13 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import { api } from '@/lib/api';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const testimonials = [
+interface Testimonial { text: string; author: string; role: string; rating: number; initials: string; }
+
+const FALLBACK_TESTIMONIALS: Testimonial[] = [
   {
     text: "The team made us feel comfortable from the very first shoot. The final visuals honestly felt like a movie.",
     author: 'Rahul & Priya Sharma',
@@ -36,11 +39,19 @@ export default function TestimonialsSection() {
   const [direction, setDirection] = useState<'next' | 'prev'>('next');
   const [isAnimating, setIsAnimating] = useState(false);
   const [paused, setPaused] = useState(false);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(FALLBACK_TESTIMONIALS);
   const sectionRef = useRef<HTMLElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const quoteRef = useRef<HTMLQuoteElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef(0);
+
+  // Load testimonials from the CMS; keep the static fallback if empty/unreachable
+  useEffect(() => {
+    api.get<{ items: Testimonial[] }>('/api/testimonials')
+      .then((d) => { if (d.items?.length) setTestimonials(d.items); })
+      .catch(() => { /* keep fallback */ });
+  }, []);
 
   // Scroll reveal
   useEffect(() => {

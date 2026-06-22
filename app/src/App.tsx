@@ -1,22 +1,51 @@
-import { Routes, Route, Navigate, useNavigate } from 'react-router';
+import { Routes, Route, Navigate, Outlet, useNavigate } from 'react-router';
 import SmoothScrollProvider from '@/components/SmoothScrollProvider';
 import CustomCursor from '@/components/CustomCursor';
 import Navigation from '@/sections/Navigation';
 import Footer from '@/sections/Footer';
 import Home from '@/pages/Home';
 import Sitemap from '@/pages/Sitemap';
+import { AuthProvider } from '@/context/AuthContext';
+import AdminLayout from '@/admin/AdminLayout';
+import Login from '@/admin/Login';
+import Dashboard from '@/admin/Dashboard';
+import LeadsPage from '@/admin/LeadsPage';
+import PortfolioPage from '@/admin/PortfolioPage';
+import TestimonialsPage from '@/admin/TestimonialsPage';
+import UsersPage from '@/admin/UsersPage';
 
 function App() {
+  return (
+    <AuthProvider>
+      <Routes>
+        {/* Admin */}
+        <Route path="/admin/login" element={<Login />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="leads" element={<LeadsPage />} />
+          <Route path="portfolio" element={<PortfolioPage />} />
+          <Route path="testimonials" element={<TestimonialsPage />} />
+          <Route path="users" element={<UsersPage />} />
+        </Route>
+
+        {/* Public site */}
+        <Route element={<PublicLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/sitemap" element={<Sitemap />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
+    </AuthProvider>
+  );
+}
+
+function PublicLayout() {
   return (
     <SmoothScrollProvider>
       <CustomCursor />
       <div className="grain-overlay" />
       <Navigation />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/sitemap" element={<Sitemap />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <Outlet />
       <Footer />
       <MobileBottomBar />
     </SmoothScrollProvider>
