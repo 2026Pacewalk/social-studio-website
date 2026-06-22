@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Quote, ChevronLeft, ChevronRight, Star, Sparkles } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -29,13 +29,17 @@ const testimonials = [
   },
 ];
 
+const AUTOPLAY_MS = 6500;
+
 export default function TestimonialsSection() {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState<'next' | 'prev'>('next');
   const [isAnimating, setIsAnimating] = useState(false);
+  const [paused, setPaused] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
-  const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const quoteRef = useRef<HTMLQuoteElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef(0);
 
   // Scroll reveal
@@ -43,17 +47,17 @@ export default function TestimonialsSection() {
     const section = sectionRef.current;
     if (!section) return;
     const ctx = gsap.context(() => {
-      gsap.from(section.querySelector('.test-header'), { y: 60, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: section, start: 'top 80%' } });
-      gsap.from(cardRef.current, { y: 60, opacity: 0, scale: 0.95, duration: 1, delay: 0.2, ease: 'power3.out', scrollTrigger: { trigger: section, start: 'top 75%' } });
+      gsap.from(section.querySelector('.test-header'), { y: 50, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: section, start: 'top 80%' } });
+      gsap.from(cardRef.current, { y: 60, opacity: 0, scale: 0.97, duration: 1, delay: 0.15, ease: 'power3.out', scrollTrigger: { trigger: section, start: 'top 75%' } });
     }, section);
     return () => ctx.revert();
   }, []);
 
-  // Card slide animation
+  // Card content slide animation
   useEffect(() => {
-    if (!cardRef.current) return;
-    const xOffset = direction === 'next' ? 60 : -60;
-    gsap.fromTo(cardRef.current,
+    if (!quoteRef.current) return;
+    const xOffset = direction === 'next' ? 40 : -40;
+    gsap.fromTo(quoteRef.current.parentElement,
       { x: xOffset, opacity: 0 },
       { x: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }
     );
@@ -64,14 +68,18 @@ export default function TestimonialsSection() {
     setIsAnimating(true);
     setDirection(dir);
     setCurrent(index);
-    setTimeout(() => setIsAnimating(false), 700);
+    setTimeout(() => setIsAnimating(false), 650);
   }, [current, isAnimating]);
 
-  // Autoplay
+  // Autoplay + synced progress bar (pauses on hover/touch)
   useEffect(() => {
-    autoPlayRef.current = setInterval(() => goTo((current + 1) % testimonials.length, 'next'), 6000);
-    return () => { if (autoPlayRef.current) clearInterval(autoPlayRef.current); };
-  }, [current, goTo]);
+    if (paused) return;
+    if (progressRef.current) {
+      gsap.fromTo(progressRef.current, { scaleX: 0 }, { scaleX: 1, duration: AUTOPLAY_MS / 1000, ease: 'none' });
+    }
+    const id = setTimeout(() => goTo((current + 1) % testimonials.length, 'next'), AUTOPLAY_MS);
+    return () => clearTimeout(id);
+  }, [current, paused, goTo]);
 
   const handleTouchStart = (e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX; };
   const handleTouchEnd = (e: React.TouchEvent) => {
@@ -94,22 +102,34 @@ export default function TestimonialsSection() {
       onTouchEnd={handleTouchEnd}
     >
       {/* Background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none" style={{ width: '700px', height: '500px', background: 'radial-gradient(circle, rgba(212,168,67,0.035) 0%, transparent 70%)', filter: 'blur(80px)' }} />
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none" style={{ width: '760px', height: '520px', background: 'radial-gradient(circle, rgba(212,168,67,0.06) 0%, transparent 70%)', filter: 'blur(80px)' }} />
       {/* Gold lines */}
-      <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(212,168,67,0.08), transparent)' }} />
-      <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(212,168,67,0.08), transparent)' }} />
+      <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(212,168,67,0.1), transparent)' }} />
+      <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(212,168,67,0.1), transparent)' }} />
 
       <div className="max-w-4xl mx-auto relative z-10">
         {/* Header */}
-        <div className="test-header text-center mb-16">
+        <div className="test-header text-center mb-12">
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="h-px w-16" style={{ background: 'linear-gradient(90deg, transparent, var(--color-gold))' }} />
             <span className="font-body text-xs tracking-[0.3em] uppercase" style={{ color: 'var(--color-gold)' }}>Client Stories</span>
             <div className="h-px w-16" style={{ background: 'linear-gradient(90deg, var(--color-gold), transparent)' }} />
           </div>
-          <h2 className="text-display" style={{ fontSize: 'clamp(2.2rem, 4.5vw, 4rem)', color: 'var(--color-text-primary)' }}>
+          <h2 className="text-display mb-6" style={{ fontSize: 'clamp(2.2rem, 4.5vw, 4rem)', color: 'var(--color-text-primary)' }}>
             Words From Our <span className="gold-text-gradient">Clients</span>
           </h2>
+
+          {/* Trust line */}
+          <div className="inline-flex items-center gap-3 rounded-full" style={{ padding: '0.55rem 1.25rem', background: 'rgba(212,168,67,0.06)', border: '1px solid rgba(212,168,67,0.14)' }}>
+            <span className="flex gap-1">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} size={15} fill="var(--color-gold)" style={{ color: 'var(--color-gold)' }} />
+              ))}
+            </span>
+            <span className="font-body text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>4.9</span>
+            <span className="w-px h-4" style={{ background: 'rgba(212,168,67,0.25)' }} />
+            <span className="font-body text-sm" style={{ color: 'var(--color-text-secondary)' }}>Loved by 2000+ clients</span>
+          </div>
         </div>
 
         {/* Testimonial Card */}
@@ -117,105 +137,114 @@ export default function TestimonialsSection() {
           ref={cardRef}
           className="relative group"
           style={{
-            background: 'linear-gradient(165deg, rgba(17,17,17,0.9) 0%, rgba(8,8,8,0.95) 100%)',
+            background: 'linear-gradient(165deg, rgba(20,20,20,0.95) 0%, rgba(8,8,8,0.96) 100%)',
             backdropFilter: 'blur(30px)',
-            border: '1px solid rgba(212,168,67,0.08)',
-            borderRadius: '24px',
-            padding: '4rem 3rem 3rem',
+            border: '1px solid rgba(212,168,67,0.12)',
+            borderRadius: '28px',
+            padding: '3.5rem 2rem 2rem',
+            boxShadow: '0 40px 80px -40px rgba(0,0,0,0.8)',
           }}
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
         >
-          {/* Corner accents */}
-          <div className="absolute top-5 left-5 w-8 h-8 opacity-30 group-hover:opacity-70 transition-opacity duration-500">
-            <div className="absolute top-0 left-0 w-full h-[1px]" style={{ background: 'var(--color-gold)' }} />
-            <div className="absolute top-0 left-0 h-full w-[1px]" style={{ background: 'var(--color-gold)' }} />
-          </div>
-          <div className="absolute top-5 right-5 w-8 h-8 opacity-30 group-hover:opacity-70 transition-opacity duration-500">
-            <div className="absolute top-0 right-0 w-full h-[1px]" style={{ background: 'var(--color-gold)' }} />
-            <div className="absolute top-0 right-0 h-full w-[1px]" style={{ background: 'var(--color-gold)' }} />
-          </div>
-          <div className="absolute bottom-5 left-5 w-8 h-8 opacity-30 group-hover:opacity-70 transition-opacity duration-500">
-            <div className="absolute bottom-0 left-0 w-full h-[1px]" style={{ background: 'var(--color-gold)' }} />
-            <div className="absolute bottom-0 left-0 h-full w-[1px]" style={{ background: 'var(--color-gold)' }} />
-          </div>
-          <div className="absolute bottom-5 right-5 w-8 h-8 opacity-30 group-hover:opacity-70 transition-opacity duration-500">
-            <div className="absolute bottom-0 right-0 w-full h-[1px]" style={{ background: 'var(--color-gold)' }} />
-            <div className="absolute bottom-0 right-0 h-full w-[1px]" style={{ background: 'var(--color-gold)' }} />
+          {/* Top progress bar */}
+          <div className="absolute top-0 left-0 right-0 overflow-hidden" style={{ height: '3px', borderTopLeftRadius: '28px', borderTopRightRadius: '28px' }}>
+            <div className="absolute inset-0" style={{ background: 'rgba(212,168,67,0.1)' }} />
+            <div ref={progressRef} className="absolute inset-0 origin-left" style={{ background: 'linear-gradient(90deg, var(--color-gold-dark), var(--color-gold-light))', transform: 'scaleX(0)' }} />
           </div>
 
-          {/* Quote Icon */}
-          <div className="flex justify-center mb-8">
-            <div className="relative">
-              <Quote size={44} style={{ color: 'var(--color-gold)', opacity: 0.25 }} />
-              <Sparkles size={14} className="absolute -top-2 -right-3 animate-pulse" style={{ color: 'var(--color-gold)', opacity: 0.6 }} />
-            </div>
-          </div>
+          {/* Giant decorative quote glyph */}
+          <span
+            aria-hidden="true"
+            className="absolute select-none pointer-events-none font-display"
+            style={{ top: '-2.5rem', left: '1.5rem', fontSize: '11rem', lineHeight: 1, color: 'var(--color-gold)', opacity: 0.1 }}
+          >
+            &ldquo;
+          </span>
 
-          {/* Stars */}
-          <div className="flex justify-center gap-1.5 mb-8">
-            {Array.from({ length: t.rating }).map((_, i) => (
-              <Star key={i} size={16} fill="var(--color-gold)" style={{ color: 'var(--color-gold)', filter: 'drop-shadow(0 0 4px rgba(212,168,67,0.4))' }} />
-            ))}
-          </div>
-
-          {/* Text */}
-          <blockquote className="font-accent text-2xl md:text-3xl italic leading-relaxed text-center mb-10" style={{ color: 'var(--color-text-primary)', lineHeight: 1.6 }}>
-            &ldquo;{t.text}&rdquo;
-          </blockquote>
-
-          {/* Author */}
-          <div className="text-center mb-8">
-            {/* Avatar */}
-            <div
-              className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 font-display text-lg font-bold"
-              style={{
-                background: 'linear-gradient(135deg, rgba(212,168,67,0.15), rgba(212,168,67,0.05))',
-                border: '2px solid rgba(212,168,67,0.2)',
-                color: 'var(--color-gold)',
-                boxShadow: '0 0 20px rgba(212,168,67,0.1)',
-              }}
-            >
-              {t.initials}
-            </div>
-            <p className="font-display text-xl font-bold" style={{ color: 'var(--color-gold)' }}>{t.author}</p>
-            <p className="font-body text-sm mt-1" style={{ color: 'var(--color-text-secondary)' }}>{t.role}</p>
-          </div>
-
-          {/* Navigation */}
-          <div className="flex items-center justify-center gap-5">
-            <button
-              onClick={() => goTo((current - 1 + testimonials.length) % testimonials.length, 'prev')}
-              className="w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[rgba(212,168,67,0.1)] hover:border-[var(--color-gold)] hover:shadow-[0_0_15px_rgba(212,168,67,0.15)]"
-              style={{ border: '1px solid rgba(212,168,67,0.12)', color: 'var(--color-gold)' }}
-              data-hover
-            >
-              <ChevronLeft size={18} />
-            </button>
-
-            <div className="flex gap-2.5">
-              {testimonials.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => goTo(i, i > current ? 'next' : 'prev')}
-                  className="relative transition-all duration-500 rounded-full"
-                  style={{
-                    width: i === current ? '28px' : '8px',
-                    height: '8px',
-                    background: i === current ? 'var(--color-gold)' : 'rgba(212,168,67,0.2)',
-                    boxShadow: i === current ? '0 0 10px rgba(212,168,67,0.4)' : 'none',
-                  }}
-                  data-hover
-                />
+          <div className="relative">
+            {/* Stars */}
+            <div className="flex justify-center gap-1.5 mb-8">
+              {Array.from({ length: t.rating }).map((_, i) => (
+                <Star key={i} size={18} fill="var(--color-gold)" style={{ color: 'var(--color-gold)', filter: 'drop-shadow(0 0 6px rgba(212,168,67,0.45))' }} />
               ))}
             </div>
 
-            <button
-              onClick={() => goTo((current + 1) % testimonials.length, 'next')}
-              className="w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[rgba(212,168,67,0.1)] hover:border-[var(--color-gold)] hover:shadow-[0_0_15px_rgba(212,168,67,0.15)]"
-              style={{ border: '1px solid rgba(212,168,67,0.12)', color: 'var(--color-gold)' }}
-              data-hover
+            {/* Text */}
+            <blockquote
+              ref={quoteRef}
+              className="font-accent italic text-center mx-auto mb-10"
+              style={{ color: 'var(--color-text-primary)', fontSize: 'clamp(1.5rem, 3vw, 2.25rem)', lineHeight: 1.5, maxWidth: '46rem' }}
             >
-              <ChevronRight size={18} />
-            </button>
+              &ldquo;{t.text}&rdquo;
+            </blockquote>
+
+            {/* Author */}
+            <div className="flex flex-col items-center mb-10">
+              <div
+                className="w-16 h-16 rounded-full flex items-center justify-center mb-4 font-display text-xl font-bold"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(212,168,67,0.22), rgba(212,168,67,0.05))',
+                  border: '2px solid rgba(212,168,67,0.3)',
+                  color: 'var(--color-gold)',
+                  boxShadow: '0 0 24px rgba(212,168,67,0.15)',
+                }}
+              >
+                {t.initials}
+              </div>
+              <p className="font-display text-xl font-bold" style={{ color: 'var(--color-text-primary)' }}>{t.author}</p>
+              <p className="font-body text-sm mt-1 tracking-wide" style={{ color: 'var(--color-gold)' }}>{t.role}</p>
+            </div>
+
+            {/* Navigation */}
+            <div className="flex items-center justify-center gap-5">
+              <button
+                onClick={() => goTo((current - 1 + testimonials.length) % testimonials.length, 'prev')}
+                className="w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[rgba(212,168,67,0.1)] hover:border-[var(--color-gold)] hover:shadow-[0_0_15px_rgba(212,168,67,0.15)]"
+                style={{ border: '1px solid rgba(212,168,67,0.18)', color: 'var(--color-gold)' }}
+                aria-label="Previous testimonial"
+                data-hover
+              >
+                <ChevronLeft size={18} />
+              </button>
+
+              {/* Client avatar selector */}
+              <div className="flex items-center gap-2.5">
+                {testimonials.map((item, i) => {
+                  const active = i === current;
+                  return (
+                    <button
+                      key={item.author}
+                      onClick={() => goTo(i, i > current ? 'next' : 'prev')}
+                      className="rounded-full flex items-center justify-center font-body font-semibold transition-all duration-400"
+                      style={{
+                        width: active ? '44px' : '38px',
+                        height: active ? '44px' : '38px',
+                        fontSize: '12px',
+                        background: active ? 'linear-gradient(135deg, rgba(212,168,67,0.25), rgba(212,168,67,0.08))' : 'rgba(212,168,67,0.04)',
+                        border: `1px solid ${active ? 'var(--color-gold)' : 'rgba(212,168,67,0.12)'}`,
+                        color: active ? 'var(--color-gold)' : 'var(--color-text-muted)',
+                        boxShadow: active ? '0 0 16px rgba(212,168,67,0.2)' : 'none',
+                      }}
+                      aria-label={`View testimonial from ${item.author}`}
+                      data-hover
+                    >
+                      {item.initials}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                onClick={() => goTo((current + 1) % testimonials.length, 'next')}
+                className="w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-[rgba(212,168,67,0.1)] hover:border-[var(--color-gold)] hover:shadow-[0_0_15px_rgba(212,168,67,0.15)]"
+                style={{ border: '1px solid rgba(212,168,67,0.18)', color: 'var(--color-gold)' }}
+                aria-label="Next testimonial"
+                data-hover
+              >
+                <ChevronRight size={18} />
+              </button>
+            </div>
           </div>
         </div>
       </div>

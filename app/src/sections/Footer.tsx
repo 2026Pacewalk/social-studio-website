@@ -71,8 +71,8 @@ export default function Footer() {
       <div className="overflow-hidden py-5" style={{ borderBottom: '1px solid rgba(212,168,67,0.04)' }}>
         <div className="flex whitespace-nowrap animate-[shimmer_30s_linear_infinite]" style={{ width: 'max-content' }}>
           {[...taglines, ...taglines, ...taglines, ...taglines].map((t, i) => (
-            <span key={i} className="font-accent text-base italic mx-8 flex items-center gap-3" style={{ color: 'var(--color-text-muted)', opacity: 0.5 }}>
-              <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ background: 'var(--color-gold)', opacity: 0.3 }} />
+            <span key={i} className="font-accent text-lg italic mx-8 flex items-center gap-3" style={{ color: 'var(--color-text-secondary)' }}>
+              <span className="w-1.5 h-1.5 rounded-full inline-block shrink-0" style={{ background: 'var(--color-gold)', opacity: 0.7 }} />
               {t}
             </span>
           ))}
