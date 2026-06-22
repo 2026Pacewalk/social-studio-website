@@ -40,7 +40,7 @@ export interface Lead {
 }
 export interface PortfolioItem {
   id: number; title: string; category: string; year: string; description: string;
-  image: string; aspect: 'tall' | 'wide' | 'square'; sort_order: number; published: number;
+  image: string; gallery: string[]; aspect: 'tall' | 'wide' | 'square'; sort_order: number; published: number;
 }
 export interface Testimonial {
   id: number; text: string; author: string; role: string; rating: number; initials: string; sort_order: number; published: number;

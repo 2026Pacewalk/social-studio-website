@@ -47,6 +47,7 @@ db.exec(`
     year TEXT,
     description TEXT,
     image TEXT NOT NULL,
+    gallery TEXT NOT NULL DEFAULT '[]',
     aspect TEXT NOT NULL DEFAULT 'wide',
     sort_order INTEGER NOT NULL DEFAULT 0,
     published INTEGER NOT NULL DEFAULT 1,
@@ -65,5 +66,11 @@ db.exec(`
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
   );
 `);
+
+// Migrations for databases created before a column existed
+const portfolioCols = db.prepare('PRAGMA table_info(portfolio)').all().map((c) => c.name);
+if (!portfolioCols.includes('gallery')) {
+  db.exec("ALTER TABLE portfolio ADD COLUMN gallery TEXT NOT NULL DEFAULT '[]'");
+}
 
 export default db;

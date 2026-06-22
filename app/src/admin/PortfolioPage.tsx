@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Plus, Pencil, Trash2, X, Upload, Loader2, EyeOff } from 'lucide-react';
+import { Plus, Pencil, Trash2, X, Upload, Loader2, EyeOff, Images } from 'lucide-react';
 import { api, type PortfolioItem } from '@/lib/api';
 
 const CATEGORIES = ['Weddings', 'Fashion', 'Jewelry', 'Brands', 'Food', 'Real Estate', 'Automobile', 'Podcasts', 'Studio'];
 const ASPECTS = ['wide', 'tall', 'square'];
 type Draft = Partial<PortfolioItem>;
-const blank: Draft = { title: '', category: 'Weddings', year: '2025', description: '', image: '', aspect: 'wide', published: 1, sort_order: 0 };
+const blank: Draft = { title: '', category: 'Weddings', year: '2025', description: '', image: '', gallery: [], aspect: 'wide', published: 1, sort_order: 0 };
 
 const cardBg = { background: 'linear-gradient(160deg, rgba(20,20,20,0.9), rgba(12,12,12,0.95))', border: '1px solid rgba(212,168,67,0.1)', borderRadius: 18 };
 const inputStyle: React.CSSProperties = { width: '100%', background: 'rgba(17,17,17,0.8)', border: '1px solid rgba(212,168,67,0.12)', borderRadius: 10, padding: '0.7rem 0.9rem', color: 'var(--color-text-primary)', fontFamily: 'var(--font-body)', fontSize: 14, outline: 'none', marginTop: 4 };
@@ -18,6 +18,7 @@ export default function PortfolioPage() {
   const [draft, setDraft] = useState<Draft | null>(null);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [galleryUploading, setGalleryUploading] = useState(false);
   const [err, setErr] = useState('');
 
   const load = () => api.get<{ items: PortfolioItem[] }>('/api/portfolio/all').then((d) => setItems(d.items)).catch(() => {});
@@ -38,6 +39,15 @@ export default function PortfolioPage() {
     try { const { url } = await api.upload('/api/portfolio/upload', file); setDraft((d) => ({ ...d!, image: url })); }
     catch (e) { setErr(e instanceof Error ? e.message : 'Upload failed'); } finally { setUploading(false); }
   };
+  const onGalleryUpload = async (files: FileList) => {
+    setGalleryUploading(true); setErr('');
+    try {
+      const urls: string[] = [];
+      for (const f of Array.from(files)) { const { url } = await api.upload('/api/portfolio/upload', f); urls.push(url); }
+      setDraft((d) => ({ ...d!, gallery: [...(d!.gallery || []), ...urls] }));
+    } catch (e) { setErr(e instanceof Error ? e.message : 'Upload failed'); } finally { setGalleryUploading(false); }
+  };
+  const removeGalleryImg = (url: string) => setDraft((d) => ({ ...d!, gallery: (d!.gallery || []).filter((g) => g !== url) }));
 
   return (
     <div>
@@ -56,6 +66,11 @@ export default function PortfolioPage() {
               <img src={it.image} alt={it.title} className="w-full h-full object-cover" loading="lazy" />
             </div>
             {!it.published && <span className="absolute top-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-body" style={{ background: 'rgba(0,0,0,0.7)', color: 'var(--color-text-secondary)' }}><EyeOff size={10} /> Draft</span>}
+            {it.gallery?.length > 0 && (
+              <span className="absolute bottom-[3.2rem] right-2 flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-body" style={{ background: 'rgba(8,8,8,0.8)', color: 'var(--color-gold)', border: '1px solid rgba(212,168,67,0.2)' }}>
+                <Images size={10} /> {it.gallery.length + 1}
+              </span>
+            )}
             <div className="p-3">
               <p className="font-body text-sm font-medium truncate" style={{ color: 'var(--color-text-primary)' }}>{it.title}</p>
               <p className="font-body text-xs" style={{ color: 'var(--color-gold)' }}>{it.category}</p>
@@ -77,14 +92,34 @@ export default function PortfolioPage() {
               <button onClick={() => setDraft(null)} style={{ color: 'var(--color-gold)' }}><X size={20} /></button>
             </div>
 
-            {/* Image */}
-            <div className="mb-4">
+            {/* Cover image */}
+            <p className="font-body text-xs uppercase tracking-wider mb-1.5" style={{ color: 'var(--color-text-muted)' }}>Cover image</p>
+            <div className="mb-5">
               <div className="aspect-[4/3] rounded-xl overflow-hidden flex items-center justify-center mb-2" style={{ background: '#000', border: '1px solid rgba(212,168,67,0.12)' }}>
-                {draft.image ? <img src={draft.image} alt="" className="w-full h-full object-cover" /> : <span className="font-body text-sm" style={{ color: 'var(--color-text-muted)' }}>No image</span>}
+                {draft.image ? <img src={draft.image} alt="" className="w-full h-full object-cover" /> : <span className="font-body text-sm" style={{ color: 'var(--color-text-muted)' }}>No cover yet</span>}
               </div>
               <label className="btn-gold btn-gold-outline text-sm w-full cursor-pointer" style={{ gap: '0.5rem' }}>
-                {uploading ? <><Loader2 size={15} className="animate-spin" /> Uploading…</> : <><Upload size={15} /> Upload image</>}
+                {uploading ? <><Loader2 size={15} className="animate-spin" /> Uploading…</> : <><Upload size={15} /> {draft.image ? 'Replace cover' : 'Upload cover'}</>}
                 <input type="file" accept="image/*" hidden onChange={(e) => e.target.files?.[0] && onUpload(e.target.files[0])} />
+              </label>
+            </div>
+
+            {/* Gallery images */}
+            <div className="flex items-center justify-between mb-1.5">
+              <p className="font-body text-xs uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>Gallery images</p>
+              <span className="font-body text-xs" style={{ color: 'var(--color-gold)' }}>{(draft.gallery || []).length} added</span>
+            </div>
+            <div className="grid grid-cols-4 gap-2 mb-5">
+              {(draft.gallery || []).map((url) => (
+                <div key={url} className="relative group aspect-square rounded-lg overflow-hidden" style={{ background: '#000', border: '1px solid rgba(212,168,67,0.12)' }}>
+                  <img src={url} alt="" className="w-full h-full object-cover" />
+                  <button type="button" onClick={() => removeGalleryImg(url)} className="absolute top-1 right-1 w-6 h-6 rounded-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: 'rgba(8,8,8,0.85)', color: '#e08585', border: '1px solid rgba(220,80,80,0.3)' }}><X size={13} /></button>
+                </div>
+              ))}
+              <label className="aspect-square rounded-lg flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors hover:bg-[rgba(212,168,67,0.05)]" style={{ border: '1px dashed rgba(212,168,67,0.3)', color: 'var(--color-gold)' }}>
+                {galleryUploading ? <Loader2 size={18} className="animate-spin" /> : <Images size={18} />}
+                <span className="font-body text-[10px]">{galleryUploading ? 'Uploading' : 'Add'}</span>
+                <input type="file" accept="image/*" multiple hidden onChange={(e) => e.target.files?.length && onGalleryUpload(e.target.files)} />
               </label>
             </div>
 

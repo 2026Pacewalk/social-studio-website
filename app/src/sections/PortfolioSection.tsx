@@ -17,10 +17,11 @@ interface PortfolioItem {
   year: string;
   desc: string;
   aspect: 'tall' | 'wide' | 'square';
+  images?: string[];
 }
 
 interface ApiPortfolioItem {
-  image: string; title: string; category: string; year: string; description: string; aspect: 'tall' | 'wide' | 'square';
+  image: string; title: string; category: string; year: string; description: string; aspect: 'tall' | 'wide' | 'square'; gallery?: string[];
 }
 
 // Static fallback used until the API responds (or if it's unreachable)
@@ -145,6 +146,10 @@ function Lightbox({ items, current, onClose, onNext, onPrev }: {
   const touchStartX = useRef(0);
 
   const item = items[current];
+  const imgs = item.images && item.images.length ? item.images : [item.src];
+  const [imgIdx, setImgIdx] = useState(0);
+  useEffect(() => { setImgIdx(0); }, [current]);
+  const activeImg = imgs[Math.min(imgIdx, imgs.length - 1)];
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -223,15 +228,33 @@ function Lightbox({ items, current, onClose, onNext, onPrev }: {
           {/* Image */}
           <div className="lg:col-span-3 relative" style={{ minHeight: '300px', maxHeight: '70vh' }}>
             <img
-              src={item.src}
+              key={activeImg}
+              src={activeImg}
               alt={`${item.title} — ${item.category} by Social Studios`}
               className="w-full h-full object-cover"
               style={{ maxHeight: '70vh' }}
             />
+            {/* In-gallery arrows (only when this project has multiple images) */}
+            {imgs.length > 1 && (
+              <>
+                <button
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center"
+                  style={{ background: 'rgba(8,8,8,0.6)', border: '1px solid rgba(212,168,67,0.2)', color: 'var(--color-gold)' }}
+                  onClick={(e) => { e.stopPropagation(); setImgIdx((i) => (i - 1 + imgs.length) % imgs.length); }}
+                  data-hover
+                ><ChevronLeft size={16} /></button>
+                <button
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center"
+                  style={{ background: 'rgba(8,8,8,0.6)', border: '1px solid rgba(212,168,67,0.2)', color: 'var(--color-gold)' }}
+                  onClick={(e) => { e.stopPropagation(); setImgIdx((i) => (i + 1) % imgs.length); }}
+                  data-hover
+                ><ChevronRight size={16} /></button>
+              </>
+            )}
             {/* Count */}
             <div className="absolute bottom-4 right-4 px-3 py-1 rounded-full" style={{ background: 'rgba(8,8,8,0.7)', backdropFilter: 'blur(8px)', border: '1px solid rgba(212,168,67,0.15)' }}>
               <span className="font-body text-xs" style={{ color: 'var(--color-gold)' }}>
-                {current + 1} / {items.length}
+                {imgs.length > 1 ? `${imgIdx + 1} / ${imgs.length}` : `${current + 1} / ${items.length}`}
               </span>
             </div>
           </div>
@@ -268,6 +291,23 @@ function Lightbox({ items, current, onClose, onNext, onPrev }: {
                 <span className="font-body text-xs" style={{ color: 'var(--color-text-muted)' }}>{item.category} Cinematography</span>
               </div>
             </div>
+
+            {/* Gallery thumbnails */}
+            {imgs.length > 1 && (
+              <div className="flex gap-2 overflow-x-auto pb-2 mb-6" style={{ scrollbarWidth: 'thin' }}>
+                {imgs.map((src, i) => (
+                  <button
+                    key={src + i}
+                    onClick={() => setImgIdx(i)}
+                    className="shrink-0 rounded-lg overflow-hidden transition-all duration-300"
+                    style={{ width: 56, height: 56, border: `2px solid ${i === imgIdx ? 'var(--color-gold)' : 'rgba(212,168,67,0.15)'}`, opacity: i === imgIdx ? 1 : 0.6 }}
+                    data-hover
+                  >
+                    <img src={src} alt="" className="w-full h-full object-cover" loading="lazy" />
+                  </button>
+                ))}
+              </div>
+            )}
 
             {/* Navigation dots */}
             <div className="flex gap-2 flex-wrap">
@@ -306,7 +346,10 @@ export default function PortfolioSection() {
     api.get<{ items: ApiPortfolioItem[] }>('/api/portfolio')
       .then((d) => {
         if (d.items?.length) {
-          setItems(d.items.map((it) => ({ src: it.image, title: it.title, category: it.category, year: it.year, desc: it.description, aspect: it.aspect })));
+          setItems(d.items.map((it) => ({
+            src: it.image, title: it.title, category: it.category, year: it.year, desc: it.description, aspect: it.aspect,
+            images: [it.image, ...(it.gallery || [])].filter((v, i, a) => v && a.indexOf(v) === i),
+          })));
         }
       })
       .catch(() => { /* keep fallback */ });
