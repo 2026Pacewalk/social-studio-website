@@ -292,8 +292,7 @@ export default function WhyChooseUs() {
             {/* Stats mini */}
             <div className="flex gap-10 mt-10">
               {[
-                { num: '99%', label: 'Satisfaction' },
-                { num: '4.9', label: 'Average Rating' },
+                { num: '5.0', label: 'Average Rating' },
               ].map((s) => (
                 <div key={s.label}>
                   <span
