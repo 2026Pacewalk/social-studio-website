@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import gsap from 'gsap';
 import { useSEO } from '@/hooks/useSEO';
 import {
-  FileCode, ArrowUpRight, Home as HomeIcon, Map, Layers, Camera, Phone,
+  FileCode, ArrowUpRight, Home as HomeIcon, Map, Layers, Camera, Phone, MapPin,
 } from 'lucide-react';
 
 interface SitemapLink {
@@ -48,14 +48,24 @@ const groups: { title: string; icon: typeof Map; links: SitemapLink[] }[] = [
     ],
   },
   {
+    title: 'Studios',
+    icon: MapPin,
+    links: [
+      { label: 'Mohali Studio', href: 'https://maps.app.goo.gl/qkrT7n4rDbNSevPr7', external: true },
+      { label: 'Goa Studio', href: 'https://www.google.com/maps/search/?api=1&query=Badem+Assagao+Bardez+Goa', external: true },
+    ],
+  },
+  {
     title: 'Connect',
     icon: Phone,
     links: [
-      { label: '98778 51923', href: 'tel:+919877851923', external: true },
-      { label: '87280 55300', href: 'tel:+918728055300', external: true },
+      { label: 'Sukhjeet Brar · 87280 55300', href: 'tel:+918728055300', external: true },
+      { label: 'Kajal Kataik · 98778 51923', href: 'tel:+919877851923', external: true },
+      { label: 'Customer Care · 98594 90594', href: 'tel:+919859490594', external: true },
       { label: 'Sukhjeetbrar@socialtheory.in', href: 'mailto:Sukhjeetbrar@socialtheory.in', external: true },
       { label: 'Chat on WhatsApp', href: 'https://wa.me/919877851923', external: true },
-      { label: 'socialstudios.in', href: 'https://socialstudios.in', external: true },
+      { label: 'Instagram', href: 'https://www.instagram.com/socialstudios_india', external: true },
+      { label: 'YouTube', href: 'https://youtube.com/@socialstudiosmohali', external: true },
     ],
   },
 ];
