@@ -190,16 +190,18 @@ export default function Footer() {
               ))}
             </div>
 
-            {/* Studios (two locations) */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <a href="https://maps.app.goo.gl/qkrT7n4rDbNSevPr7" target="_blank" rel="noopener noreferrer" className="footer-reveal rounded-xl p-3.5 transition-all duration-300 group" style={{ background: 'rgba(212,168,67,0.04)', border: '1px solid rgba(212,168,67,0.1)' }} data-hover>
-                <p className="font-body text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 mb-1.5" style={{ color: 'var(--color-gold)' }}><MapPin size={12} /> Mohali</p>
-                <p className="font-body text-xs transition-colors duration-300 group-hover:text-[var(--color-text-secondary)]" style={{ color: 'var(--color-text-muted)', lineHeight: 1.6 }}>CPM 34, 2nd Floor, Sector 105, Central Plaza, Emaar, Near Indian Bank</p>
-              </a>
-              <a href="https://www.google.com/maps/search/?api=1&query=Badem+Assagao+Bardez+Goa" target="_blank" rel="noopener noreferrer" className="footer-reveal rounded-xl p-3.5 transition-all duration-300 group" style={{ background: 'rgba(212,168,67,0.04)', border: '1px solid rgba(212,168,67,0.1)' }} data-hover>
-                <p className="font-body text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 mb-1.5" style={{ color: 'var(--color-gold)' }}><MapPin size={12} /> Goa</p>
-                <p className="font-body text-xs transition-colors duration-300 group-hover:text-[var(--color-text-secondary)]" style={{ color: 'var(--color-text-muted)', lineHeight: 1.6 }}>Shop No. 632, Badem, Assagao, Bardez, Goa</p>
-              </a>
+            {/* Studios (three locations) */}
+            <div className="flex flex-col gap-3 mb-6">
+              {[
+                { city: 'Mohali', addr: '1st Floor, Central Plaza, CPM-34, Emaar MGF Rd, near Indian Bank, Sector 105, Mohali, Punjab 140306', href: 'https://maps.app.goo.gl/qkrT7n4rDbNSevPr7' },
+                { city: 'Ludhiana', addr: 'BU 20, Grand City Plaza, Lodhi Club Road, Ludhiana, Punjab', href: 'https://www.google.com/maps/search/?api=1&query=Grand+City+Plaza+Lodhi+Club+Road+Ludhiana' },
+                { city: 'Goa', addr: 'Shop No. 632, Badem, Assagao, Bardez, Goa', href: 'https://www.google.com/maps/search/?api=1&query=Badem+Assagao+Bardez+Goa' },
+              ].map((s) => (
+                <a key={s.city} href={s.href} target="_blank" rel="noopener noreferrer" className="footer-reveal rounded-xl p-3.5 transition-all duration-300 group" style={{ background: 'rgba(212,168,67,0.04)', border: '1px solid rgba(212,168,67,0.1)' }} data-hover>
+                  <p className="font-body text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 mb-1.5" style={{ color: 'var(--color-gold)' }}><MapPin size={12} /> {s.city}</p>
+                  <p className="font-body text-xs transition-colors duration-300 group-hover:text-[var(--color-text-secondary)]" style={{ color: 'var(--color-text-muted)', lineHeight: 1.6 }}>{s.addr}</p>
+                </a>
+              ))}
             </div>
 
             {/* WhatsApp + hours */}

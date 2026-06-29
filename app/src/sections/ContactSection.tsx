@@ -128,7 +128,8 @@ export default function ContactSection() {
     { icon: Phone, label: 'Phone', value: 'Customer Care · 98594 90594', href: 'tel:+919859490594' },
     { icon: Mail, label: 'Email', value: 'Sukhjeetbrar@socialtheory.in', href: 'mailto:Sukhjeetbrar@socialtheory.in' },
     { icon: Globe, label: 'Website', value: 'socialstudios.in', href: 'https://socialstudios.in' },
-    { icon: MapPin, label: 'Mohali Studio', value: 'CPM 34, 2nd Floor, Sector 105, Central Plaza, Emaar, Near Indian Bank, Mohali', href: 'https://maps.app.goo.gl/qkrT7n4rDbNSevPr7' },
+    { icon: MapPin, label: 'Mohali Studio', value: '1st Floor, Central Plaza, CPM-34, Emaar MGF Rd, near Indian Bank, Sector 105, Mohali, Punjab 140306', href: 'https://maps.app.goo.gl/qkrT7n4rDbNSevPr7' },
+    { icon: MapPin, label: 'Ludhiana Studio', value: 'BU 20, Grand City Plaza, Lodhi Club Road, Ludhiana, Punjab', href: 'https://www.google.com/maps/search/?api=1&query=Grand+City+Plaza+Lodhi+Club+Road+Ludhiana' },
     { icon: MapPin, label: 'Goa Studio', value: 'Shop No. 632, Badem, Assagao, Bardez, Goa', href: 'https://www.google.com/maps/search/?api=1&query=Badem+Assagao+Bardez+Goa' },
   ];
 
