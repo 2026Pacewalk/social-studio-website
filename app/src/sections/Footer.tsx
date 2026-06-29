@@ -122,7 +122,7 @@ export default function Footer() {
               Luxury visual production house creating cinematic stories that make people feel, remember, and relive. Every frame is a masterpiece.
             </p>
             <p className="footer-reveal font-body text-xs flex items-center gap-2 mb-6" style={{ color: 'var(--color-text-muted)', letterSpacing: '0.05em' }}>
-              <MapPin size={13} style={{ color: 'var(--color-gold)' }} /> Mohali · Goa · India
+              <MapPin size={13} style={{ color: 'var(--color-gold)' }} /> Mohali · Ludhiana · Delhi · Goa
             </p>
 
             {/* Social Icons */}
