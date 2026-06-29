@@ -269,6 +269,14 @@ export default function Navigation() {
                   Kajal Kataik · 98778 51923
                 </span>
               </a>
+              <a href="tel:+919859490594" className="flex items-center gap-3 group" data-hover>
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'rgba(212,168,67,0.05)', border: '1px solid rgba(212,168,67,0.1)' }}>
+                  <Phone size={14} style={{ color: 'var(--color-gold)' }} />
+                </div>
+                <span className="font-body text-sm transition-colors duration-300 group-hover:text-[var(--color-gold)]" style={{ color: 'var(--color-text-secondary)' }}>
+                  Customer Care : 98594 90594
+                </span>
+              </a>
               <a href="mailto:Sukhjeetbrar@socialtheory.in" className="flex items-center gap-3 group" data-hover>
                 <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'rgba(212,168,67,0.05)', border: '1px solid rgba(212,168,67,0.1)' }}>
                   <Mail size={14} style={{ color: 'var(--color-gold)' }} />
