@@ -130,7 +130,7 @@ export default function ContactSection() {
     { icon: Globe, label: 'Website', value: 'socialstudios.in', href: 'https://socialstudios.in' },
     { icon: MapPin, label: 'Mohali Studio', value: '1st Floor, Central Plaza, CPM-34, Emaar MGF Rd, near Indian Bank, Sector 105, Mohali, Punjab 140306', href: 'https://maps.app.goo.gl/qkrT7n4rDbNSevPr7' },
     { icon: MapPin, label: 'Ludhiana Studio', value: 'BU 20, Grand City Plaza, Lodhi Club Road, Ludhiana, Punjab', href: 'https://www.google.com/maps/search/?api=1&query=Grand+City+Plaza+Lodhi+Club+Road+Ludhiana' },
-    { icon: MapPin, label: 'New Delhi Studio', value: '178/1, Ground Floor, Neb Sarai, Near Shokeen Market / Mastermind School, South Delhi, New Delhi 110068', href: 'https://www.google.com/maps/search/?api=1&query=178/1+Neb+Sarai+Shokeen+Market+South+Delhi+110068' },
+    { icon: MapPin, label: 'New Delhi Studio', value: '178/1, Ground Floor, Neb Sarai, Near Shokeen Market, Mastermind School, South Delhi, New Delhi 110068', href: 'https://www.google.com/maps/search/?api=1&query=178/1+Neb+Sarai+Shokeen+Market+South+Delhi+110068' },
     { icon: MapPin, label: 'Goa Studio', value: '#632 Badem, Assagao, Bardez - Goa', href: 'https://www.google.com/maps/search/?api=1&query=Badem+Assagao+Bardez+Goa' },
   ];
 
