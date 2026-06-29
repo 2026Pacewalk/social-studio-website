@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { ArrowUpRight, Phone, MessageCircle, Instagram, Youtube, Mail, MapPin } from 'lucide-react';
+import { ArrowUpRight, Phone, MessageCircle, Instagram, Youtube, Facebook, Mail, MapPin } from 'lucide-react';
 import { useLenis } from '@/hooks/useLenis';
 
 const navLinks = [
@@ -13,6 +13,7 @@ const navLinks = [
 
 const socials = [
   { icon: Instagram, label: 'Instagram', href: 'https://www.instagram.com/socialstudios_india' },
+  { icon: Facebook, label: 'Facebook', href: 'https://www.facebook.com/share/1CKmEeY7r3/' },
   { icon: Youtube, label: 'YouTube', href: 'https://youtube.com/@socialstudiosmohali' },
 ];
 

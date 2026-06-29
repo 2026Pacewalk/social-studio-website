@@ -53,6 +53,7 @@ const groups: { title: string; icon: typeof Map; links: SitemapLink[] }[] = [
     links: [
       { label: 'Mohali Studio', href: 'https://maps.app.goo.gl/qkrT7n4rDbNSevPr7', external: true },
       { label: 'Ludhiana Studio', href: 'https://www.google.com/maps/search/?api=1&query=Grand+City+Plaza+Lodhi+Club+Road+Ludhiana', external: true },
+      { label: 'New Delhi Studio', href: 'https://www.google.com/maps/search/?api=1&query=178/1+Neb+Sarai+Shokeen+Market+South+Delhi+110068', external: true },
       { label: 'Goa Studio', href: 'https://www.google.com/maps/search/?api=1&query=Badem+Assagao+Bardez+Goa', external: true },
     ],
   },

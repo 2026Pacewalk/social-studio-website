@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Instagram, Youtube, Phone, MessageCircle, Mail, MapPin, ArrowUp, Clock } from 'lucide-react';
+import { Instagram, Youtube, Facebook, Phone, MessageCircle, Mail, MapPin, ArrowUp, Clock } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -28,6 +28,7 @@ const services = [
 
 const socials = [
   { icon: Instagram, label: 'Instagram', href: 'https://www.instagram.com/socialstudios_india' },
+  { icon: Facebook, label: 'Facebook', href: 'https://www.facebook.com/share/1CKmEeY7r3/' },
   { icon: Youtube, label: 'YouTube', href: 'https://youtube.com/@socialstudiosmohali' },
 ];
 
@@ -195,6 +196,7 @@ export default function Footer() {
               {[
                 { city: 'Mohali', addr: '1st Floor, Central Plaza, CPM-34, Emaar MGF Rd, near Indian Bank, Sector 105, Mohali, Punjab 140306', href: 'https://maps.app.goo.gl/qkrT7n4rDbNSevPr7' },
                 { city: 'Ludhiana', addr: 'BU 20, Grand City Plaza, Lodhi Club Road, Ludhiana, Punjab', href: 'https://www.google.com/maps/search/?api=1&query=Grand+City+Plaza+Lodhi+Club+Road+Ludhiana' },
+                { city: 'New Delhi', addr: '178/1, Ground Floor, Neb Sarai, Near Shokeen Market / Mastermind School, South Delhi, New Delhi 110068', href: 'https://www.google.com/maps/search/?api=1&query=178/1+Neb+Sarai+Shokeen+Market+South+Delhi+110068' },
                 { city: 'Goa', addr: '#632 Badem, Assagao, Bardez - Goa', href: 'https://www.google.com/maps/search/?api=1&query=Badem+Assagao+Bardez+Goa' },
               ].map((s) => (
                 <a key={s.city} href={s.href} target="_blank" rel="noopener noreferrer" className="footer-reveal rounded-xl p-3.5 transition-all duration-300 group" style={{ background: 'rgba(212,168,67,0.04)', border: '1px solid rgba(212,168,67,0.1)' }} data-hover>
