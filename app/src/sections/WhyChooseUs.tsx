@@ -264,7 +264,7 @@ export default function WhyChooseUs() {
 
             <h2
               className="text-display mb-6"
-              style={{ fontSize: 'clamp(2.2rem, 4.5vw, 4rem)', color: 'var(--color-text-primary)', lineHeight: 1.12 }}
+              style={{ fontSize: 'clamp(2.05rem, 4.3vw, 3.8rem)', color: 'var(--color-text-primary)', lineHeight: 1.12 }}
             >
               Why Clients{' '}
               <span className="gold-text-gradient">Choose Us</span>

@@ -123,11 +123,12 @@ export default function ContactSection() {
   };
 
   const contactItems = [
-    { icon: Phone, label: 'Sukhjeet Singh Brar', value: '87280 55300', href: 'tel:+918728055300' },
-    { icon: Phone, label: 'Kajal Kataik', value: '98778 51923', href: 'tel:+919877851923' },
+    { icon: Phone, label: 'Phone', value: '87280 55300', href: 'tel:+918728055300' },
+    { icon: Phone, label: 'Phone', value: '98778 51923', href: 'tel:+919877851923' },
     { icon: Mail, label: 'Email', value: 'Sukhjeetbrar@socialtheory.in', href: 'mailto:Sukhjeetbrar@socialtheory.in' },
     { icon: Globe, label: 'Website', value: 'socialstudios.in', href: 'https://socialstudios.in' },
-    { icon: MapPin, label: 'Studio', value: 'CPM 34, 2nd Floor, Sector 105, Central Plaza, Emaar, Near Indian Bank, Mohali', href: 'https://maps.app.goo.gl/qkrT7n4rDbNSevPr7' },
+    { icon: MapPin, label: 'Mohali Studio', value: 'CPM 34, 2nd Floor, Sector 105, Central Plaza, Emaar, Near Indian Bank, Mohali', href: 'https://maps.app.goo.gl/qkrT7n4rDbNSevPr7' },
+    { icon: MapPin, label: 'Goa Studio', value: 'Shop No. 632, Badem, Assagao, Bardez, Goa', href: 'https://www.google.com/maps/search/?api=1&query=Badem+Assagao+Bardez+Goa' },
   ];
 
   return (
@@ -145,7 +146,7 @@ export default function ContactSection() {
               <span className="font-body text-xs tracking-[0.3em] uppercase" style={{ color: 'var(--color-gold)' }}>Get In Touch</span>
             </div>
 
-            <h2 className="contact-reveal text-display mb-6" style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)', color: 'var(--color-text-primary)', lineHeight: 1.12 }}>
+            <h2 className="contact-reveal text-display mb-6" style={{ fontSize: 'clamp(2.05rem, 3.85vw, 3.3rem)', color: 'var(--color-text-primary)', lineHeight: 1.12 }}>
               Let&apos;s Bring Your <span className="gold-text-gradient">Vision</span> To Life
             </h2>
 

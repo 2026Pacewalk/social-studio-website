@@ -382,13 +382,36 @@ export default function PortfolioSection() {
     ? items
     : items.filter((p) => p.category === activeCategory);
 
-  // Header animation
+  // Header word reveal (hero-style). Content stays visible by default; we only
+  // hide + animate when the heading starts below the fold, with a safety timeout
+  // so it can never be left invisible.
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from(headerRef.current, { y: 50, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: headerRef.current, start: 'top 88%' } });
-      gsap.from(filterRef.current, { y: 30, opacity: 0, duration: 0.8, delay: 0.2, ease: 'power3.out', scrollTrigger: { trigger: filterRef.current, start: 'top 90%' } });
-    });
-    return () => ctx.revert();
+    const header = headerRef.current;
+    if (!header) return;
+    // Already on screen at mount → leave it visible, no entrance animation needed.
+    if (header.getBoundingClientRect().top < window.innerHeight) return;
+
+    const words = gsap.utils.toArray<HTMLElement>('.port-word');
+    gsap.set(words, { y: 60, opacity: 0, rotateX: 45 });
+    gsap.set('.port-eyebrow', { y: 20, opacity: 0 });
+    if (filterRef.current) gsap.set(filterRef.current, { y: 30, opacity: 0 });
+
+    let revealed = false;
+    const reveal = () => {
+      if (revealed) return;
+      revealed = true;
+      gsap.to('.port-eyebrow', { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' });
+      gsap.to(words, { y: 0, opacity: 1, rotateX: 0, duration: 1, ease: 'power3.out', stagger: 0.12, delay: 0.1, overwrite: true });
+      if (filterRef.current) gsap.to(filterRef.current, { y: 0, opacity: 1, duration: 0.8, delay: 0.3, ease: 'power3.out' });
+    };
+
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { reveal(); obs.disconnect(); } }),
+      { threshold: 0.12 }
+    );
+    obs.observe(header);
+    const failSafe = window.setTimeout(reveal, 4000); // never stay hidden
+    return () => { obs.disconnect(); window.clearTimeout(failSafe); };
   }, []);
 
   // Filter change animation
@@ -427,14 +450,15 @@ export default function PortfolioSection() {
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
         <div ref={headerRef} className="text-center mb-16">
-          <div className="flex items-center justify-center gap-4 mb-6">
+          <div className="port-eyebrow flex items-center justify-center gap-4 mb-6">
             <div className="h-px w-16" style={{ background: 'linear-gradient(90deg, transparent, var(--color-gold))' }} />
             <span className="font-body text-xs tracking-[0.3em] uppercase" style={{ color: 'var(--color-gold)' }}>Our Portfolio</span>
             <div className="h-px w-16" style={{ background: 'linear-gradient(90deg, var(--color-gold), transparent)' }} />
           </div>
 
-          <h2 className="text-display mb-6" style={{ fontSize: 'clamp(2.2rem, 4.5vw, 4rem)', color: 'var(--color-text-primary)' }}>
-            Selected <span className="gold-text-gradient">Archives</span>
+          <h2 className="text-display mb-6" style={{ fontSize: 'clamp(2.05rem, 4.3vw, 3.8rem)', color: 'var(--color-text-primary)', perspective: '800px' }}>
+            <span className="port-word inline-block mr-[0.25em]" style={{ transformOrigin: 'center bottom' }}>Selected</span>
+            <span className="port-word inline-block" style={{ transformOrigin: 'center bottom' }}><span className="gold-text-gradient">Archives</span></span>
           </h2>
 
           <p className="font-body text-base max-w-3xl mx-auto" style={{ color: 'var(--color-text-secondary)', lineHeight: 1.9 }}>

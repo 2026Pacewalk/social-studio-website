@@ -83,7 +83,7 @@ export default function FAQSection() {
 
         <h2
           className="faq-reveal text-display text-center mb-14"
-          style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', color: 'var(--color-text-primary)', lineHeight: 1.15 }}
+          style={{ fontSize: 'clamp(1.9rem, 3.8vw, 3rem)', color: 'var(--color-text-primary)', lineHeight: 1.15 }}
         >
           Frequently Asked <span className="gold-text-gradient">Questions</span>
         </h2>

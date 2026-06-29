@@ -126,21 +126,28 @@ export default function TestimonialsSection() {
             <span className="font-body text-xs tracking-[0.3em] uppercase" style={{ color: 'var(--color-gold)' }}>Client Stories</span>
             <div className="h-px w-16" style={{ background: 'linear-gradient(90deg, var(--color-gold), transparent)' }} />
           </div>
-          <h2 className="text-display mb-6" style={{ fontSize: 'clamp(2.2rem, 4.5vw, 4rem)', color: 'var(--color-text-primary)' }}>
+          <h2 className="text-display mb-6" style={{ fontSize: 'clamp(2.05rem, 4.3vw, 3.8rem)', color: 'var(--color-text-primary)' }}>
             Words From Our <span className="gold-text-gradient">Clients</span>
           </h2>
 
           {/* Trust line */}
-          <div className="inline-flex items-center gap-3 rounded-full" style={{ padding: '0.55rem 1.25rem', background: 'rgba(212,168,67,0.06)', border: '1px solid rgba(212,168,67,0.14)' }}>
+          <a
+            href="https://maps.app.goo.gl/qkrT7n4rDbNSevPr7"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-3 rounded-full transition-all duration-300 hover:border-[var(--color-gold)]"
+            style={{ padding: '0.55rem 1.25rem', background: 'rgba(212,168,67,0.06)', border: '1px solid rgba(212,168,67,0.14)' }}
+            data-hover
+          >
             <span className="flex gap-1">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star key={i} size={15} fill="var(--color-gold)" style={{ color: 'var(--color-gold)' }} />
               ))}
             </span>
-            <span className="font-body text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>4.9</span>
+            <span className="font-body text-sm font-semibold" style={{ color: 'var(--color-text-primary)' }}>5.0</span>
             <span className="w-px h-4" style={{ background: 'rgba(212,168,67,0.25)' }} />
-            <span className="font-body text-sm" style={{ color: 'var(--color-text-secondary)' }}>Loved by 2000+ clients</span>
-          </div>
+            <span className="font-body text-sm" style={{ color: 'var(--color-text-secondary)' }}>Read our Google reviews</span>
+          </a>
         </div>
 
         {/* Testimonial Card */}

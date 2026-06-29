@@ -141,7 +141,7 @@ export default function FinalCTA() {
         <h2
           className="cta-reveal text-display mb-8"
           style={{
-            fontSize: 'clamp(2.2rem, 5.5vw, 4.5rem)',
+            fontSize: 'clamp(2.05rem, 5.2vw, 4.25rem)',
             color: 'var(--color-text-primary)',
             lineHeight: 1.15,
           }}

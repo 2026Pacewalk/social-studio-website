@@ -79,7 +79,7 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left" style={{ padding: '3.5rem var(--space-container)' }}>
           <div className="footer-reveal">
             <p className="font-accent italic text-base mb-1" style={{ color: 'var(--color-gold)' }}>Let&apos;s create together</p>
-            <h3 className="text-display" style={{ fontSize: 'clamp(1.6rem, 3.2vw, 2.6rem)', color: 'var(--color-text-primary)', lineHeight: 1.15 }}>
+            <h3 className="text-display" style={{ fontSize: 'clamp(1.5rem, 3vw, 2.45rem)', color: 'var(--color-text-primary)', lineHeight: 1.15 }}>
               Ready to make something <span className="gold-text-gradient">unforgettable?</span>
             </h3>
           </div>
@@ -128,9 +128,9 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-400"
-                  style={{ background: 'rgba(212,168,67,0.04)', border: '1px solid rgba(212,168,67,0.08)', color: 'var(--color-text-muted)' }}
-                  onMouseEnter={(e) => { const el = e.currentTarget; el.style.borderColor = 'rgba(212,168,67,0.3)'; el.style.color = 'var(--color-gold)'; el.style.background = 'rgba(212,168,67,0.08)'; el.style.transform = 'translateY(-3px)'; el.style.boxShadow = '0 4px 20px rgba(212,168,67,0.1)'; }}
-                  onMouseLeave={(e) => { const el = e.currentTarget; el.style.borderColor = 'rgba(212,168,67,0.08)'; el.style.color = 'var(--color-text-muted)'; el.style.background = 'rgba(212,168,67,0.04)'; el.style.transform = 'translateY(0)'; el.style.boxShadow = 'none'; }}
+                  style={{ background: 'rgba(212,168,67,0.1)', border: '1px solid rgba(212,168,67,0.25)', color: 'var(--color-gold)' }}
+                  onMouseEnter={(e) => { const el = e.currentTarget; el.style.borderColor = 'var(--color-gold)'; el.style.background = 'rgba(212,168,67,0.18)'; el.style.transform = 'translateY(-3px)'; el.style.boxShadow = '0 4px 20px rgba(212,168,67,0.2)'; }}
+                  onMouseLeave={(e) => { const el = e.currentTarget; el.style.borderColor = 'rgba(212,168,67,0.25)'; el.style.background = 'rgba(212,168,67,0.1)'; el.style.transform = 'translateY(0)'; el.style.boxShadow = 'none'; }}
                   data-hover
                   aria-label={s.label}
                 >
@@ -194,13 +194,13 @@ export default function Footer() {
                 <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'rgba(212,168,67,0.05)', border: '1px solid rgba(212,168,67,0.1)' }}>
                   <Phone size={14} style={{ color: 'var(--color-gold)' }} />
                 </div>
-                <span className="font-body text-sm transition-colors duration-300 group-hover:text-[var(--color-gold)]" style={{ color: 'var(--color-text-secondary)' }}>Sukhjeet Singh Brar · 87280 55300</span>
+                <span className="font-body text-sm transition-colors duration-300 group-hover:text-[var(--color-gold)]" style={{ color: 'var(--color-text-secondary)' }}>87280 55300</span>
               </a>
               <a href="tel:+919877851923" className="footer-reveal flex items-center gap-3 group" data-hover>
                 <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'rgba(212,168,67,0.05)', border: '1px solid rgba(212,168,67,0.1)' }}>
                   <Phone size={14} style={{ color: 'var(--color-gold)' }} />
                 </div>
-                <span className="font-body text-sm transition-colors duration-300 group-hover:text-[var(--color-gold)]" style={{ color: 'var(--color-text-secondary)' }}>Kajal Kataik · 98778 51923</span>
+                <span className="font-body text-sm transition-colors duration-300 group-hover:text-[var(--color-gold)]" style={{ color: 'var(--color-text-secondary)' }}>98778 51923</span>
               </a>
               <a href="mailto:Sukhjeetbrar@socialtheory.in" className="footer-reveal flex items-center gap-3 group" data-hover>
                 <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'rgba(212,168,67,0.05)', border: '1px solid rgba(212,168,67,0.1)' }}>
@@ -213,7 +213,15 @@ export default function Footer() {
                   <MapPin size={14} style={{ color: 'var(--color-gold)' }} />
                 </div>
                 <span className="font-body text-sm transition-colors duration-300 group-hover:text-[var(--color-gold)]" style={{ color: 'var(--color-text-secondary)', lineHeight: 1.7 }}>
-                  CPM 34, 2nd Floor,<br />Sector 105, Central Plaza,<br />Emaar, Near Indian Bank,<br />Mohali
+                  <span style={{ color: 'var(--color-gold)' }}>Mohali</span><br />CPM 34, 2nd Floor,<br />Sector 105, Central Plaza,<br />Emaar, Near Indian Bank
+                </span>
+              </a>
+              <a href="https://www.google.com/maps/search/?api=1&query=Badem+Assagao+Bardez+Goa" target="_blank" rel="noopener noreferrer" className="footer-reveal flex items-start gap-3 group" data-hover>
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'rgba(212,168,67,0.05)', border: '1px solid rgba(212,168,67,0.1)' }}>
+                  <MapPin size={14} style={{ color: 'var(--color-gold)' }} />
+                </div>
+                <span className="font-body text-sm transition-colors duration-300 group-hover:text-[var(--color-gold)]" style={{ color: 'var(--color-text-secondary)', lineHeight: 1.7 }}>
+                  <span style={{ color: 'var(--color-gold)' }}>Goa</span><br />Shop No. 632, Badem,<br />Assagao, Bardez, Goa
                 </span>
               </a>
               <a href="https://wa.me/919877851923" target="_blank" rel="noopener noreferrer" className="footer-reveal flex items-center gap-3 group mt-2" data-hover>

@@ -196,7 +196,7 @@ export default function AboutSection() {
             <h2
               className="about-reveal text-display mb-8"
               style={{
-                fontSize: 'clamp(2rem, 4vw, 3.2rem)',
+                fontSize: 'clamp(1.9rem, 3.8vw, 3rem)',
                 color: 'var(--color-text-primary)',
                 lineHeight: 1.15,
               }}
