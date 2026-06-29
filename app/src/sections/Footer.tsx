@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Instagram, Youtube, Phone, MessageCircle, Mail, MapPin, ArrowUpRight, ArrowUp, Clock } from 'lucide-react';
+import { Instagram, Youtube, Phone, MessageCircle, Mail, MapPin, ArrowUp, Clock } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,15 +13,6 @@ const taglines = [
   'Visuals That Make People Feel',
   'More Than Content',
   'Turning Moments Into Memories',
-];
-
-const quickLinks = [
-  { label: 'About Us', href: '#about' },
-  { label: 'Services', href: '#services' },
-  { label: 'Portfolio', href: '#portfolio' },
-  { label: 'Testimonials', href: '#testimonials' },
-  { label: 'Contact', href: '#contact' },
-  { label: 'Book a Shoot', href: '#contact' },
 ];
 
 const services = [
@@ -46,13 +37,24 @@ export default function Footer() {
   useEffect(() => {
     const footer = footerRef.current;
     if (!footer) return;
-    const ctx = gsap.context(() => {
-      gsap.from(footer.querySelectorAll('.footer-reveal'), {
-        y: 40, opacity: 0, duration: 0.8, stagger: 0.1, ease: 'power3.out',
-        scrollTrigger: { trigger: footer, start: 'top 90%' },
-      });
-    }, footer);
-    return () => ctx.revert();
+    const els = footer.querySelectorAll('.footer-reveal');
+    // Already on screen at mount → leave visible, no entrance animation.
+    if (footer.getBoundingClientRect().top < window.innerHeight) return;
+
+    gsap.set(els, { y: 40, opacity: 0 });
+    let done = false;
+    const reveal = () => {
+      if (done) return;
+      done = true;
+      gsap.to(els, { y: 0, opacity: 1, duration: 0.8, stagger: 0.05, ease: 'power3.out' });
+    };
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { reveal(); obs.disconnect(); } }),
+      { threshold: 0.05 }
+    );
+    obs.observe(footer);
+    const failSafe = window.setTimeout(reveal, 4000); // never stay hidden
+    return () => { obs.disconnect(); window.clearTimeout(failSafe); };
   }, []);
 
   const navigate = useNavigate();
@@ -109,14 +111,17 @@ export default function Footer() {
 
       {/* Main Footer */}
       <div className="max-w-7xl mx-auto" style={{ padding: '5rem var(--space-container) 3rem' }}>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-10">
           {/* Brand Column */}
           <div className="lg:col-span-4">
             <div className="footer-reveal mb-5">
               <img src="/assets/logo.png" alt="Social Studios" className="h-12 w-auto" style={{ objectFit: 'contain' }} />
             </div>
-            <p className="footer-reveal font-body text-sm mb-8 max-w-xs" style={{ color: 'var(--color-text-secondary)', lineHeight: 1.8 }}>
+            <p className="footer-reveal font-body text-sm mb-6 max-w-xs" style={{ color: 'var(--color-text-secondary)', lineHeight: 1.8 }}>
               Luxury visual production house creating cinematic stories that make people feel, remember, and relive. Every frame is a masterpiece.
+            </p>
+            <p className="footer-reveal font-body text-xs flex items-center gap-2 mb-6" style={{ color: 'var(--color-text-muted)', letterSpacing: '0.05em' }}>
+              <MapPin size={13} style={{ color: 'var(--color-gold)' }} /> Mohali · Goa · India
             </p>
 
             {/* Social Icons */}
@@ -127,121 +132,84 @@ export default function Footer() {
                   href={s.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-400"
+                  className="w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-400"
                   style={{ background: 'rgba(212,168,67,0.1)', border: '1px solid rgba(212,168,67,0.25)', color: 'var(--color-gold)' }}
                   onMouseEnter={(e) => { const el = e.currentTarget; el.style.borderColor = 'var(--color-gold)'; el.style.background = 'rgba(212,168,67,0.18)'; el.style.transform = 'translateY(-3px)'; el.style.boxShadow = '0 4px 20px rgba(212,168,67,0.2)'; }}
                   onMouseLeave={(e) => { const el = e.currentTarget; el.style.borderColor = 'rgba(212,168,67,0.25)'; el.style.background = 'rgba(212,168,67,0.1)'; el.style.transform = 'translateY(0)'; el.style.boxShadow = 'none'; }}
                   data-hover
                   aria-label={s.label}
                 >
-                  <s.icon size={16} />
+                  <s.icon size={17} />
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="lg:col-span-2">
-            <h4 className="footer-reveal font-body text-xs font-semibold uppercase tracking-[0.2em] mb-6" style={{ color: 'var(--color-gold)' }}>Quick Links</h4>
-            <ul className="flex flex-col gap-3">
-              {quickLinks.map((link) => (
-                <li key={link.label}>
+          {/* Services */}
+          <div className="lg:col-span-4">
+            <h4 className="footer-reveal font-body text-xs font-semibold uppercase tracking-[0.2em] mb-6 inline-flex items-center gap-2" style={{ color: 'var(--color-gold)' }}>
+              Services <span className="h-px w-8" style={{ background: 'rgba(212,168,67,0.4)' }} />
+            </h4>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+              {services.map((s) => (
+                <li key={s}>
                   <button
-                    onClick={() => handleNav(link.href)}
-                    className="footer-reveal font-body text-sm transition-all duration-300 hover:text-[var(--color-gold)] hover:translate-x-1 inline-flex items-center gap-1 group"
+                    onClick={() => handleNav('#services')}
+                    className="footer-reveal font-body text-sm text-left flex items-center gap-2 transition-all duration-300 hover:text-[var(--color-gold)] hover:translate-x-1"
                     style={{ color: 'var(--color-text-secondary)' }}
                     data-hover
                   >
-                    {link.label}
-                    <ArrowUpRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: 'var(--color-gold)' }} />
-                  </button>
-                </li>
-              ))}
-              <li>
-                <Link
-                  to="/sitemap"
-                  className="footer-reveal font-body text-sm transition-all duration-300 hover:text-[var(--color-gold)] hover:translate-x-1 inline-flex items-center gap-1 group"
-                  style={{ color: 'var(--color-text-secondary)' }}
-                  data-hover
-                >
-                  Sitemap
-                  <ArrowUpRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: 'var(--color-gold)' }} />
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Services */}
-          <div className="lg:col-span-3">
-            <h4 className="footer-reveal font-body text-xs font-semibold uppercase tracking-[0.2em] mb-6" style={{ color: 'var(--color-gold)' }}>Services</h4>
-            <ul className="flex flex-col gap-3">
-              {services.map((s) => (
-                <li key={s}>
-                  <span className="footer-reveal font-body text-sm flex items-center gap-2" style={{ color: 'var(--color-text-secondary)' }}>
-                    <span className="w-1 h-1 rounded-full" style={{ background: 'var(--color-gold)', opacity: 0.4 }} />
+                    <span className="w-1 h-1 rounded-full shrink-0" style={{ background: 'var(--color-gold)', opacity: 0.5 }} />
                     {s}
-                  </span>
+                  </button>
                 </li>
               ))}
             </ul>
           </div>
 
           {/* Contact */}
-          <div className="lg:col-span-3">
-            <h4 className="footer-reveal font-body text-xs font-semibold uppercase tracking-[0.2em] mb-6" style={{ color: 'var(--color-gold)' }}>Contact</h4>
-            <div className="flex flex-col gap-4">
-              <a href="tel:+918728055300" className="footer-reveal flex items-center gap-3 group" data-hover>
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'rgba(212,168,67,0.05)', border: '1px solid rgba(212,168,67,0.1)' }}>
-                  <Phone size={14} style={{ color: 'var(--color-gold)' }} />
-                </div>
-                <span className="font-body text-sm transition-colors duration-300 group-hover:text-[var(--color-gold)]" style={{ color: 'var(--color-text-secondary)' }}>Sukhjeet Brar · 87280 55300</span>
+          <div className="lg:col-span-4">
+            <h4 className="footer-reveal font-body text-xs font-semibold uppercase tracking-[0.2em] mb-6 inline-flex items-center gap-2" style={{ color: 'var(--color-gold)' }}>
+              Get In Touch <span className="h-px w-8" style={{ background: 'rgba(212,168,67,0.4)' }} />
+            </h4>
+
+            {/* Phones + email */}
+            <div className="flex flex-col gap-3.5 mb-6">
+              {[
+                { v: 'Sukhjeet Brar · 87280 55300', href: 'tel:+918728055300', icon: Phone },
+                { v: 'Kajal Kataik · 98778 51923', href: 'tel:+919877851923', icon: Phone },
+                { v: 'Customer Care · 98594 90594', href: 'tel:+919859490594', icon: Phone },
+                { v: 'Sukhjeetbrar@socialtheory.in', href: 'mailto:Sukhjeetbrar@socialtheory.in', icon: Mail, breakAll: true },
+              ].map((c) => (
+                <a key={c.v} href={c.href} className="footer-reveal flex items-center gap-3 group" data-hover>
+                  <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'rgba(212,168,67,0.05)', border: '1px solid rgba(212,168,67,0.1)' }}>
+                    <c.icon size={14} style={{ color: 'var(--color-gold)' }} />
+                  </div>
+                  <span className={`font-body text-sm transition-colors duration-300 group-hover:text-[var(--color-gold)] ${c.breakAll ? 'break-all' : ''}`} style={{ color: 'var(--color-text-secondary)' }}>{c.v}</span>
+                </a>
+              ))}
+            </div>
+
+            {/* Studios (two locations) */}
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <a href="https://maps.app.goo.gl/qkrT7n4rDbNSevPr7" target="_blank" rel="noopener noreferrer" className="footer-reveal rounded-xl p-3.5 transition-all duration-300 group" style={{ background: 'rgba(212,168,67,0.04)', border: '1px solid rgba(212,168,67,0.1)' }} data-hover>
+                <p className="font-body text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 mb-1.5" style={{ color: 'var(--color-gold)' }}><MapPin size={12} /> Mohali</p>
+                <p className="font-body text-xs transition-colors duration-300 group-hover:text-[var(--color-text-secondary)]" style={{ color: 'var(--color-text-muted)', lineHeight: 1.6 }}>CPM 34, 2nd Floor, Sector 105, Central Plaza, Emaar, Near Indian Bank</p>
               </a>
-              <a href="tel:+919877851923" className="footer-reveal flex items-center gap-3 group" data-hover>
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'rgba(212,168,67,0.05)', border: '1px solid rgba(212,168,67,0.1)' }}>
-                  <Phone size={14} style={{ color: 'var(--color-gold)' }} />
-                </div>
-                <span className="font-body text-sm transition-colors duration-300 group-hover:text-[var(--color-gold)]" style={{ color: 'var(--color-text-secondary)' }}>Kajal Kataik · 98778 51923</span>
+              <a href="https://www.google.com/maps/search/?api=1&query=Badem+Assagao+Bardez+Goa" target="_blank" rel="noopener noreferrer" className="footer-reveal rounded-xl p-3.5 transition-all duration-300 group" style={{ background: 'rgba(212,168,67,0.04)', border: '1px solid rgba(212,168,67,0.1)' }} data-hover>
+                <p className="font-body text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 mb-1.5" style={{ color: 'var(--color-gold)' }}><MapPin size={12} /> Goa</p>
+                <p className="font-body text-xs transition-colors duration-300 group-hover:text-[var(--color-text-secondary)]" style={{ color: 'var(--color-text-muted)', lineHeight: 1.6 }}>Shop No. 632, Badem, Assagao, Bardez, Goa</p>
               </a>
-              <a href="tel:+919859490594" className="footer-reveal flex items-center gap-3 group" data-hover>
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'rgba(212,168,67,0.05)', border: '1px solid rgba(212,168,67,0.1)' }}>
-                  <Phone size={14} style={{ color: 'var(--color-gold)' }} />
-                </div>
-                <span className="font-body text-sm transition-colors duration-300 group-hover:text-[var(--color-gold)]" style={{ color: 'var(--color-text-secondary)' }}>Customer Care · 98594 90594</span>
+            </div>
+
+            {/* WhatsApp + hours */}
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+              <a href="https://wa.me/919877851923" target="_blank" rel="noopener noreferrer" className="footer-reveal flex items-center gap-2 font-body text-sm transition-colors duration-300 hover:text-[var(--color-gold)]" style={{ color: 'var(--color-text-secondary)' }} data-hover>
+                <MessageCircle size={15} style={{ color: 'var(--color-gold)' }} /> Chat on WhatsApp
               </a>
-              <a href="mailto:Sukhjeetbrar@socialtheory.in" className="footer-reveal flex items-center gap-3 group" data-hover>
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'rgba(212,168,67,0.05)', border: '1px solid rgba(212,168,67,0.1)' }}>
-                  <Mail size={14} style={{ color: 'var(--color-gold)' }} />
-                </div>
-                <span className="font-body text-sm transition-colors duration-300 group-hover:text-[var(--color-gold)] break-all" style={{ color: 'var(--color-text-secondary)' }}>Sukhjeetbrar@socialtheory.in</span>
-              </a>
-              <a href="https://maps.app.goo.gl/qkrT7n4rDbNSevPr7" target="_blank" rel="noopener noreferrer" className="footer-reveal flex items-start gap-3 group" data-hover>
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'rgba(212,168,67,0.05)', border: '1px solid rgba(212,168,67,0.1)' }}>
-                  <MapPin size={14} style={{ color: 'var(--color-gold)' }} />
-                </div>
-                <span className="font-body text-sm transition-colors duration-300 group-hover:text-[var(--color-gold)]" style={{ color: 'var(--color-text-secondary)', lineHeight: 1.7 }}>
-                  <span style={{ color: 'var(--color-gold)' }}>Mohali</span><br />CPM 34, 2nd Floor,<br />Sector 105, Central Plaza,<br />Emaar, Near Indian Bank
-                </span>
-              </a>
-              <a href="https://www.google.com/maps/search/?api=1&query=Badem+Assagao+Bardez+Goa" target="_blank" rel="noopener noreferrer" className="footer-reveal flex items-start gap-3 group" data-hover>
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'rgba(212,168,67,0.05)', border: '1px solid rgba(212,168,67,0.1)' }}>
-                  <MapPin size={14} style={{ color: 'var(--color-gold)' }} />
-                </div>
-                <span className="font-body text-sm transition-colors duration-300 group-hover:text-[var(--color-gold)]" style={{ color: 'var(--color-text-secondary)', lineHeight: 1.7 }}>
-                  <span style={{ color: 'var(--color-gold)' }}>Goa</span><br />Shop No. 632, Badem,<br />Assagao, Bardez, Goa
-                </span>
-              </a>
-              <a href="https://wa.me/919877851923" target="_blank" rel="noopener noreferrer" className="footer-reveal flex items-center gap-3 group mt-2" data-hover>
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'rgba(212,168,67,0.05)', border: '1px solid rgba(212,168,67,0.1)' }}>
-                  <MessageCircle size={14} style={{ color: 'var(--color-gold)' }} />
-                </div>
-                <span className="font-body text-sm transition-colors duration-300 group-hover:text-[var(--color-gold)]" style={{ color: 'var(--color-text-secondary)' }}>Chat on WhatsApp</span>
-              </a>
-              <div className="footer-reveal flex items-center gap-3 mt-1">
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: 'rgba(212,168,67,0.05)', border: '1px solid rgba(212,168,67,0.1)' }}>
-                  <Clock size={14} style={{ color: 'var(--color-gold)' }} />
-                </div>
-                <span className="font-body text-sm" style={{ color: 'var(--color-text-secondary)' }}>Mon – Sat · 9 AM – 8 PM</span>
-              </div>
+              <span className="footer-reveal flex items-center gap-2 font-body text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                <Clock size={15} style={{ color: 'var(--color-gold)' }} /> Mon – Sat · 9 AM – 8 PM
+              </span>
             </div>
           </div>
         </div>
