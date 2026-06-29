@@ -123,9 +123,9 @@ export default function ContactSection() {
   };
 
   const contactItems = [
-    { icon: Phone, label: 'Phone', value: '87280 55300', href: 'tel:+918728055300' },
-    { icon: Phone, label: 'Phone', value: '98778 51923', href: 'tel:+919877851923' },
-    { icon: Phone, label: 'Customer Care', value: '98594 90594', href: 'tel:+919859490594' },
+    { icon: Phone, label: 'Phone', value: 'Sukhjeet Brar · 87280 55300', href: 'tel:+918728055300' },
+    { icon: Phone, label: 'Phone', value: 'Kajal Kataik · 98778 51923', href: 'tel:+919877851923' },
+    { icon: Phone, label: 'Phone', value: 'Customer Care · 98594 90594', href: 'tel:+919859490594' },
     { icon: Mail, label: 'Email', value: 'Sukhjeetbrar@socialtheory.in', href: 'mailto:Sukhjeetbrar@socialtheory.in' },
     { icon: Globe, label: 'Website', value: 'socialstudios.in', href: 'https://socialstudios.in' },
     { icon: MapPin, label: 'Mohali Studio', value: 'CPM 34, 2nd Floor, Sector 105, Central Plaza, Emaar, Near Indian Bank, Mohali', href: 'https://maps.app.goo.gl/qkrT7n4rDbNSevPr7' },
