@@ -48,6 +48,7 @@ export default function HeroSection() {
           loop
           playsInline
           preload="auto"
+          poster="/assets/about-studio.jpg"
           onError={() => setHasVideo(false)}
         >
           <source src={HERO_VIDEO} type="video/mp4" />
