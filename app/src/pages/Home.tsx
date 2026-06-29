@@ -22,8 +22,8 @@ export default function Home() {
   const lenis = useLenis();
 
   useSEO({
-    title: 'Social Studios | Premium Visual Production House — Wedding, Fashion, Brand Cinematography',
-    description: 'Social Studios creates luxury cinematic visuals for weddings, fashion, brands, podcasts, corporate, maternity, real estate & automobile. Premium photography & filmmaking studio in India.',
+    title: 'Social Studios | Photography & Cinematography Studio in Mohali & Goa',
+    description: 'Premium photography & cinematography studio in Mohali, Chandigarh & Goa. Wedding films, fashion, brand, product, jewellery, real estate & automobile shoots — book your shoot today.',
     path: '/',
   });
 
